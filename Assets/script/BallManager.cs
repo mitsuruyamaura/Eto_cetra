@@ -13,7 +13,6 @@ public class BallManager : MonoBehaviour
 	public List<GameObject> selectedBallList = new List<GameObject>();
 	public GameObject scoreGUI;
 	private int point = 100;
-	public GameObject exchangeButton;
 	public bool isPlaying = true;
 
 	private List<Ball> ballList = new List<Ball>();
@@ -121,10 +120,6 @@ public class BallManager : MonoBehaviour
 	}
 
 	IEnumerator DropBall(int count) {
-		if (count == 50) {
-			StartCoroutine("RestrictPush");
-		}
-
 		for (int i = 0; i < count; i++) {
 			// Ballプレファブを生成し、Ballクラスに代入
 			Ball ball = Instantiate(ballPrefab, canvasTran, false);
@@ -141,15 +136,6 @@ public class BallManager : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// Exchangeボタンのロック
-	/// </summary>
-	/// <returns></returns>
-	IEnumerator RestrictPush() {
-		exchangeButton.GetComponent<Button>().interactable = false;
-		yield return new WaitForSeconds(5.0f);
-		exchangeButton.GetComponent<Button>().interactable = true;
-	}
 
 	/// <summary>
 	/// つながったボールをリストに追加

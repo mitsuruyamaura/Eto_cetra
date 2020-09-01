@@ -11,7 +11,7 @@ public class QuitCheckPouUp : MonoBehaviour
     void Start()
     {
         // 各ボタンに処理を登録
-        btnQuitGame.onClick.AddListener(GameDirector.QuitGame);
+        btnQuitGame.onClick.AddListener(UIManager.QuitGame);
         btnClosePopup.onClick.AddListener(OnClickClosePopUp);
 
         // ゲーム内時間の流れを停止

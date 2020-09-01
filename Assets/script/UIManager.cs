@@ -3,14 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameDirector : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
+    public static UIManager instance;
+
     public QuitCheckPouUp quitCheckPouUpPrefab;
-    public QuitCheckPouUp quitCheckPouUp = null;
+    private QuitCheckPouUp quitCheckPouUp = null;
     public Transform canvasTran;
     public Text txtTimer;
 
-    float timer;
+    public float timer;
+    public Wind wind;
+
+    public Button btnWind;
+    public Button btnSkill;
+
+    void Awake() {
+        if (instance == null) {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        } else {
+            Destroy(gameObject);
+        }    
+    }
+
+    void Start() {
+        btnWind.onClick.AddListener(CreateUpdraft);    
+    }
+
+    private void CreateUpdraft() {
+        wind.Updraft();
+        btnWind.interactable = false;
+
+        // コルーチン化して、Trueに戻してもいいかも
+
+    }
+
+    public void StopUpdraft() {
+        btnWind.interactable = true;
+    }
 
     void Update()
     {
@@ -25,7 +56,11 @@ public class GameDirector : MonoBehaviour
             //QuitGameManager.ExitGame();
         }
 
-        timer += Time.deltaTime;
+        timer -= Time.deltaTime;
+        
+        if (timer <= 0) {
+            timer = 0;
+        }
         txtTimer.text = timer.ToString("F1");
     }
 
