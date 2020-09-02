@@ -27,7 +27,7 @@ public class BallManager : MonoBehaviour
 
 
 	void Start() {
-		StartCoroutine(DropBall(generateBallCount));
+		//StartCoroutine(DropBall(generateBallCount));
 	}
 
 	void Update() {
@@ -119,7 +119,8 @@ public class BallManager : MonoBehaviour
 		lastBall = null;
 	}
 
-	IEnumerator DropBall(int count) {
+	public IEnumerator DropBall(int count) {
+		UIManager.instance.InactiveWind(false);
 		for (int i = 0; i < count; i++) {
 			// Ballプレファブを生成し、Ballクラスに代入
 			Ball ball = Instantiate(ballPrefab, canvasTran, false);
@@ -134,6 +135,7 @@ public class BallManager : MonoBehaviour
 
 			yield return new WaitForSeconds(0.05f);
 		}
+		UIManager.instance.InactiveWind(true);
 	}
 
 

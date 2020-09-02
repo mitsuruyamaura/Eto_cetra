@@ -26,16 +26,16 @@ public class SkillScript : MonoBehaviour
     /// </summary>
     private void SetUpSkill() {
         switch (GameData.instance.skillType) {
-            case GameData.SkillType.SingleToSingleChange:
+            case SkillType.SingleToSingleChange:
                 btnSkill.onClick.AddListener(() => ballManager.ChangeSpecificBalls(chooseBallColorNum, changeBallColorNum));
                 break;
-            case GameData.SkillType.SingleToRandomChange:
+            case SkillType.SingleToRandomChange:
                 btnSkill.onClick.AddListener(() => ballManager.ChangeSpecificBallsToRandomColor(chooseBallColorNum));
                 break;
-            case GameData.SkillType.AllRandomChange:
+            case SkillType.AllRandomChange:
                 btnSkill.onClick.AddListener(ballManager.ChangeRandomBalls);
                 break;
-            case GameData.SkillType.DeleteMaxBall:
+            case SkillType.DeleteMaxBall:
 
                 break;
         }

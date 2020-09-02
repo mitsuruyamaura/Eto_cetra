@@ -28,8 +28,14 @@ public class UIManager : MonoBehaviour
     }
 
     void Start() {
-        btnWind.onClick.AddListener(CreateUpdraft);    
+        InactiveWind(false);
+        btnWind.onClick.AddListener(CreateUpdraft);
     }
+
+    public void InactiveWind(bool isSwitch) {
+        btnWind.gameObject.SetActive(isSwitch);
+    }
+
 
     private void CreateUpdraft() {
         wind.Updraft();

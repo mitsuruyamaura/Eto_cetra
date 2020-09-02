@@ -5,10 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/tumutumu.unity
-    guid: 47069fee232434a4ab8cb80016852aa8
-  - enabled: 1
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/Title.unity
     guid: e7ff8a41a124ec547aa0a35526c1a6cd
+  - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: 0bda52d2c0b7e4343a6a5de00c9c953a
   m_configObjects: {}

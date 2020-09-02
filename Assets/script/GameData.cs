@@ -6,13 +6,16 @@ public class GameData : MonoBehaviour
 {
     public static GameData instance;
 
-    public enum SkillType {
-        SingleToSingleChange,
-        SingleToRandomChange,
-        AllRandomChange,
-        DeleteMaxBall,
+    public enum GameMode {
+        Random,
+        Normal
     }
+    public GameMode gameMode;
 
+    [Header("選択中の干支")]
+    public EtoType etoType;
+
+    [Header("選択中のスキル")]
     public SkillType skillType;
 
     void Awake() {
