@@ -21,8 +21,11 @@ public class GameData : MonoBehaviour
     [Header("ゲーム内の干支の数")]
     public int createEtoCount = 50;
 
-    public int score;
+    public int score = 0;
 
+    public int etoPoint = 100;
+
+    public float etoRate = 3;
 
     void Awake() {
         if (instance == null) {
