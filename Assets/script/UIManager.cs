@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Packages.Rider.Editor.UnitTesting;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class UIManager : MonoBehaviour
     private QuitCheckPouUp quitCheckPouUp = null;
     public Transform canvasTran;
     public Text txtTimer;
+    public Text txtScore;
 
     public float timer;
     public Wind wind;
@@ -47,6 +49,17 @@ public class UIManager : MonoBehaviour
 
     public void StopUpdraft() {
         btnWind.interactable = true;
+    }
+
+    /// <summary>
+    /// スコア加算処理
+    /// </summary>
+    /// <param name="amount"></param>
+    public void AddScore(int amount) {
+        GameData.instance.score += amount;
+        Debug.Log(GameData.instance.score);
+
+        txtScore.text = GameData.instance.score.ToString();
     }
 
     void Update()

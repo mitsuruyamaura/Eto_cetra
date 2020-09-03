@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SkillScript : MonoBehaviour
 {
-    public BallManager ballManager;
+    public EtoManager ballManager;
     public Button btnSkill;
 
     
@@ -27,10 +27,10 @@ public class SkillScript : MonoBehaviour
     private void SetUpSkill() {
         switch (GameData.instance.skillType) {
             case SkillType.SingleToSingleChange:
-                btnSkill.onClick.AddListener(() => ballManager.ChangeSpecificBalls(chooseBallColorNum, changeBallColorNum));
+                //btnSkill.onClick.AddListener(() => ballManager.ChangeSpecificBalls(GameData.instance.etoDetail.etoType, GameData.instance.etoDetail.imgEto.sprite));
                 break;
             case SkillType.SingleToRandomChange:
-                btnSkill.onClick.AddListener(() => ballManager.ChangeSpecificBallsToRandomColor(chooseBallColorNum));
+                //btnSkill.onClick.AddListener(() => ballManager.ChangeSpecificBallsToRandomColor(chooseBallColorNum));
                 break;
             case SkillType.AllRandomChange:
                 btnSkill.onClick.AddListener(ballManager.ChangeRandomBalls);

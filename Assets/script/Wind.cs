@@ -31,6 +31,7 @@ public class Wind : MonoBehaviour {
     /// <param name="col"></param>
     void OnTriggerStay2D(Collider2D col) {
         if (col.TryGetComponent(out Rigidbody2D rb)) {
+            Debug.Log(rb);
             // 相対速度計算
             Vector2 relativeVelocity = windPower - rb.velocity;
 

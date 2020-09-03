@@ -34,11 +34,12 @@ public class EtoDetail : MonoBehaviour
         sequence.Append(canvasGroup.DOFade(1.0f, 0.25f).SetEase(Ease.Linear));
         sequence.Join(transform.DOPunchScale(new Vector3(1, 1, 1), 0.5f));
     }
-
-    
+        
     private IEnumerator OnClickEtoDetail() {
         // 番号をGameDataに渡す
         GameData.instance.etoType = etoType;
+
+        GameData.instance.etoDetail = this;
 
         // ポップアニメさせる
         transform.DOScale(new Vector3(1.3f, 1.3f, 1.3f), 0.15f).SetEase(Ease.Linear);
@@ -48,5 +49,4 @@ public class EtoDetail : MonoBehaviour
         // ボタンの色を選択中の色に変更する
         modeSelectPopUp.InactivateEtoDetailList(etoType, 0.3f);
     }
-
 }
