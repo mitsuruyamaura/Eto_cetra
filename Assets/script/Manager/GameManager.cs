@@ -64,15 +64,8 @@ public class GameManager : MonoBehaviour
 		// 干支がつながっている数を初期化
 		linkCount = 0;
 		
-		if (hit.collider != null) {
-			//GameObject hitObj = hit.collider.gameObject;
-
-			
+		if (hit.collider != null) {			
 			if(hit.collider.gameObject.TryGetComponent(out Eto dragEto)) { 
-
-			//string ballName = hitObj.name;
-			//if (ballName.StartsWith("Ball")) {
-
 				firstEto = dragEto;
 				lastEto = dragEto;
 				currentEtoType = dragEto.etoType;
@@ -88,10 +81,7 @@ public class GameManager : MonoBehaviour
 
 	private void OnDragging() {
 		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-		if (hit.collider != null) {
-			//GameObject hitObj = hit.collider.gameObject;
-			Eto dragEto = hit.collider.gameObject.GetComponent<Eto>();
-
+		if (hit.collider != null && hit.collider.gameObject.TryGetComponent(out Eto dragEto)) {
             if (currentEtoType == null) {
 				return;
             }
@@ -129,9 +119,13 @@ public class GameManager : MonoBehaviour
 
 	private void OnEndDrag() {
 		if (removeEtoList.Count >= 3) {
+			// 選択されている干支を消す
 			for (int i = 0; i < removeEtoList.Count; i++) {
 				Destroy(removeEtoList[i].gameObject);
 			}
+
+			// スキルポイント加算
+			UIManager.instance.AddSkillPoint(removeEtoList.Count);
 
             // 加算処理
             if (currentEtoType == GameData.instance.etoType) {

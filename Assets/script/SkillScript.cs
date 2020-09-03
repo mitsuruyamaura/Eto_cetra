@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SkillScript : MonoBehaviour
 {
-    public EtoManager ballManager;
+    public GameManager gameManager;
     public Button btnSkill;
 
     
@@ -27,17 +27,20 @@ public class SkillScript : MonoBehaviour
     private void SetUpSkill() {
         switch (GameData.instance.skillType) {
             case SkillType.SingleToSingleChange:
-                //btnSkill.onClick.AddListener(() => ballManager.ChangeSpecificBalls(GameData.instance.etoDetail.etoType, GameData.instance.etoDetail.imgEto.sprite));
+                //btnSkill.onClick.AddListener(() => gameManager.ChangeSpecificBalls(GameData.instance.etoDetail.etoType, GameData.instance.etoDetail.imgEto.sprite));
                 break;
             case SkillType.SingleToRandomChange:
-                //btnSkill.onClick.AddListener(() => ballManager.ChangeSpecificBallsToRandomColor(chooseBallColorNum));
+                //btnSkill.onClick.AddListener(() => gameManager.ChangeSpecificBallsToRandomColor(chooseBallColorNum));
                 break;
             case SkillType.AllRandomChange:
-                btnSkill.onClick.AddListener(ballManager.ChangeRandomBalls);
+                btnSkill.onClick.AddListener(gameManager.ChangeRandomBalls);
                 break;
             case SkillType.DeleteMaxBall:
 
                 break;
+
+               
         }
+        
     }
 }

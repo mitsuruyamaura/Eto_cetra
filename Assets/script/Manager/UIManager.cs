@@ -21,7 +21,11 @@ public class UIManager : MonoBehaviour
     public Button btnWind;
     public Button btnSkill;
 
+    public Image imgSkill;
+
     public GameManager gameManager;
+
+    private Tween tween = null;
 
     void Awake() {
         if (instance == null) {
@@ -35,6 +39,8 @@ public class UIManager : MonoBehaviour
     void Start() {
         InactiveWind(false);
         btnWind.onClick.AddListener(CreateUpdraft);
+        btnSkill.onClick.AddListener(TriggerSkill);
+        btnSkill.interactable = false;
     }
 
     public void InactiveWind(bool isSwitch) {
@@ -58,6 +64,17 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// スキル使用
+    /// </summary>
+    private void TriggerSkill() {
+        btnSkill.interactable = false;
+        imgSkill.DOFillAmount(0, 1.0f);
+        tween.Kill();
+        tween = null;
+        imgSkill.transform.localScale = Vector3.one;
+    }
+
+    /// <summary>
     /// スコア加算処理
     /// </summary>
     /// <param name="amount"></param>
@@ -76,6 +93,21 @@ public class UIManager : MonoBehaviour
         // 徐々に加算処理にする
 
         txtScore.text = GameData.instance.score.ToString();
+    }
+
+    /// <summary>
+    /// スキルポイント加算
+    /// </summary>
+    /// <param name="count"></param>
+    public void AddSkillPoint(int count) {
+        float a = imgSkill.fillAmount;
+        float value = a += count * 0.05f;
+        imgSkill.DOFillAmount(value, 0.5f);
+
+        if (imgSkill.fillAmount >= 1.0f && tween == null) {
+            btnSkill.interactable = true;
+            tween = imgSkill.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.25f).SetEase(Ease.InCirc).SetLoops(-1, LoopType.Yoyo);
+        }
     }
 
 
