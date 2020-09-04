@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
-public class SkillScript : MonoBehaviour
+public class DataBaseManager : MonoBehaviour
 {
+    [Serializable]
+    public class EtoData {
+        public EtoType etoType;
+        public SkillType skillType;
+    }
+    public List<EtoData> etoDataList = new List<EtoData>();
+
     public GameManager gameManager;
     public Button btnSkill;
 
@@ -25,6 +33,13 @@ public class SkillScript : MonoBehaviour
     /// ボタンにスキルをセット
     /// </summary>
     private void SetUpSkill() {
+        foreach (SkillType skillType in Enum.GetValues(typeof(SkillType))) {
+            if (GameData.instance.skillType == skillType) {
+
+            }
+        }
+
+
         switch (GameData.instance.skillType) {
             case SkillType.SingleToSingleChange:
                 //btnSkill.onClick.AddListener(() => gameManager.ChangeSpecificBalls(GameData.instance.etoDetail.etoType, GameData.instance.etoDetail.imgEto.sprite));
@@ -33,14 +48,14 @@ public class SkillScript : MonoBehaviour
                 //btnSkill.onClick.AddListener(() => gameManager.ChangeSpecificBallsToRandomColor(chooseBallColorNum));
                 break;
             case SkillType.AllRandomChange:
-                btnSkill.onClick.AddListener(gameManager.ChangeRandomBalls);
+                //btnSkill.onClick.AddListener(gameManager.ChangeRandomBalls);
                 break;
             case SkillType.DeleteMaxBall:
-
+                btnSkill.onClick.AddListener(gameManager.DeleteMaxBalls);
                 break;
 
-               
+
         }
-        
+
     }
 }

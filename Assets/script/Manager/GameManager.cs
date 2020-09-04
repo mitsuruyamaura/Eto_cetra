@@ -121,6 +121,9 @@ public class GameManager : MonoBehaviour
 		if (removeEtoList.Count >= 3) {
 			// 選択されている干支を消す
 			for (int i = 0; i < removeEtoList.Count; i++) {
+				// 干支リストから取り除く
+				etoList.Remove(removeEtoList[i]);
+				// 干支を削除
 				Destroy(removeEtoList[i].gameObject);
 			}
 
@@ -315,4 +318,46 @@ public class GameManager : MonoBehaviour
 	// 自分の干支以外で一番数の多い干支をすべて自分の干支に変える
 
 
+	/// <summary>
+	/// 最も数の多い干支をまとめて削除する
+	/// </summary>
+	public void DeleteMaxBalls() {
+		// Dictinaryを初期化。干支のタイプを数を代入できるようにする
+		Dictionary<EtoType, int> dictionary = new Dictionary<EtoType, int>();
+
+		// リストの中から干支のタイプごとにDictionaryの要素を作成(ここで５つの干支タイプごとにいくつ数があるかわかる)
+        foreach (Eto eto in etoList) {
+            if (dictionary.ContainsKey(eto.etoType)) {
+				// すでにある要素の場合には数のカウントを加算
+				dictionary[eto.etoType]++; 
+            } else {
+				// まだ作られていない干支のタイプの場合には新しく要素を作り、カウントを１する
+				dictionary.Add(eto.etoType, 1);
+            }
+        }
+
+		// Debug
+        foreach (KeyValuePair<EtoType, int> keyValuePair in dictionary) {
+			Debug.Log("干支 : " + keyValuePair.Key + " 数 : " + keyValuePair.Value);
+        }
+
+		// Dictionaryを検索し、最も数の多い干支のタイプを見つけて、消す干支のタイプと数を決定
+		EtoType maxEtoType = dictionary.OrderByDescending(x => x.Value).First().Key;
+		int removeNum = dictionary.OrderByDescending(x => x.Value).First().Value;
+		
+		Debug.Log("消す干支 : " + maxEtoType + " 数 : " + removeNum);
+		
+        // 対象の干支を破壊
+        for (int i = 0; i < etoList.Count; i++) {
+            if (etoList[i].etoType == maxEtoType) {
+				Destroy(etoList[i].gameObject);
+            }
+        }
+
+		// etoListから対象の干支データを削除
+		etoList.RemoveAll(x => x.etoType == maxEtoType);
+
+		// 破壊した干支の数だけ干支を生成
+		StartCoroutine(CreateEtos(removeNum));
+	}
 }
