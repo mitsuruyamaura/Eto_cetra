@@ -15,7 +15,7 @@ public class ResultPopUp : MonoBehaviour
 
     void Start() {
         posY = transform.position.y;
-        btnClosePopUp.interactable = false;
+        btnClosePopUp.gameObject.GetComponent<CanvasGroup>().alpha = 0.0f;
     }
 
     public void DisplayResult(int eraseEtoCount, GameManager gameManager) {
@@ -43,7 +43,8 @@ public class ResultPopUp : MonoBehaviour
                     },
                     eraseEtoCount,
                     1.0f).SetEase(Ease.InCirc)).OnComplete(() => {
-                        btnClosePopUp.interactable = true;                    
+                        sequence.AppendInterval(0.5f);
+                        btnClosePopUp.gameObject.GetComponent<CanvasGroup>().alpha = 1.0f;       
                         }
                     );           
     }

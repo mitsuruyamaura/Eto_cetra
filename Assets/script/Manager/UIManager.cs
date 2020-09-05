@@ -21,12 +21,12 @@ public class UIManager : MonoBehaviour
 
     public GameManager gameManager;
 
-    private Tween tween = null;
+    private Tweener tweener = null;
 
     void Start() {
         InactiveWind(false);
         btnWind.onClick.AddListener(CreateUpdraft);
-        btnSkill.onClick.AddListener(TriggerSkill);
+        //btnSkill.onClick.AddListener(TriggerSkill);
         btnSkill.interactable = false;
         wind.SetUpWind(this);
     }
@@ -54,11 +54,12 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// スキル使用
     /// </summary>
-    private void TriggerSkill() {
+    public void TriggerSkill() {
         btnSkill.interactable = false;
         imgSkill.DOFillAmount(0, 1.0f);
-        tween.Kill();
-        tween = null;
+        tweener.Kill();
+        tweener = null;
+        Debug.Log(tweener);
         imgSkill.transform.localScale = Vector3.one;
     }
 
@@ -66,7 +67,7 @@ public class UIManager : MonoBehaviour
     /// スコア加算処理
     /// </summary>
     /// <param name="amount"></param>
-    public void AddScore(int amount, bool isChooseEto) {
+    public void UpdateDisplayScore(int amount, bool isChooseEto) {
         GameData.instance.score += amount;
         Debug.Log(GameData.instance.score);
 
@@ -92,9 +93,10 @@ public class UIManager : MonoBehaviour
         float value = a += count * 0.05f;
         imgSkill.DOFillAmount(value, 0.5f);
 
-        if (imgSkill.fillAmount >= 1.0f && tween == null) {
+        if (imgSkill.fillAmount >= 1.0f && tweener == null) {
+            Debug.Log(imgSkill.fillAmount);
             btnSkill.interactable = true;
-            tween = imgSkill.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.25f).SetEase(Ease.InCirc).SetLoops(-1, LoopType.Yoyo);
+            tweener = imgSkill.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.25f).SetEase(Ease.InCirc).SetLoops(-1, LoopType.Yoyo);
         }
     }
 

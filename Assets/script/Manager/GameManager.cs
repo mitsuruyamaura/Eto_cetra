@@ -135,23 +135,27 @@ public class GameManager : MonoBehaviour
 				Destroy(removeEtoList[i].gameObject);
 			}
 
-			// スキルポイント加算
-			uiManager.AddSkillPoint(removeEtoList.Count);
+			// スコアと消した干支の数の加算
+			AddScores(currentEtoType, removeEtoList.Count);
 
-			// 消した数を加算
-			eraseEtoCount += removeEtoList.Count;
+			//// スキルポイント加算
+			//uiManager.AddSkillPoint(removeEtoList.Count);
 
-            // スコア加算処理
-            if (currentEtoType == GameData.instance.etoType) {
-				// 選択している干支の場合にはスコアボーナス
-				uiManager.AddScore(Mathf.CeilToInt(GameData.instance.etoPoint * removeEtoList.Count * GameData.instance.etoRate), true);
-			} else {
-				// それ以外
-				uiManager.AddScore(GameData.instance.etoPoint * removeEtoList.Count, false);
-			}
+			//// 消した数を加算
+			//eraseEtoCount += removeEtoList.Count;
+
+   //         // スコア加算処理
+   //         if (currentEtoType == GameData.instance.etoType) {
+			//	// 選択している干支の場合にはスコアボーナス
+			//	uiManager.AddScore(Mathf.CeilToInt(GameData.instance.etoPoint * removeEtoList.Count * GameData.instance.etoRate), true);
+			//} else {
+			//	// それ以外
+			//	uiManager.AddScore(GameData.instance.etoPoint * removeEtoList.Count, false);
+			//}
 			
 			// TODO ４つ以上消えていたら、ボーナス
 
+			// 消した干支の数だけ新しい干支をランダムに生成
 			StartCoroutine(CreateEtos(removeEtoList.Count));
 			removeEtoList.Clear();
 		} else {
@@ -403,11 +407,30 @@ public class GameManager : MonoBehaviour
 		// etoListから対象の干支データを削除
 		etoList.RemoveAll(x => x.etoType == maxEtoType);
 
+		// 点数と消した干支の加算
+		AddScores(maxEtoType, removeNum);
+
 		// 破壊した干支の数だけ干支を生成
 		StartCoroutine(CreateEtos(removeNum));
 	}
 
-	public void SetUpModeSelectPopUp() {
-		
-    }
+	/// <summary>
+	/// スコアと消した干支の数を加算
+	/// </summary>
+	private void AddScores(EtoType? etoType, int count) {
+		// スキルポイント加算
+		uiManager.AddSkillPoint(count);
+
+		// 消した数を加算
+		eraseEtoCount += count;
+
+		// スコア加算処理
+		if (etoType == GameData.instance.etoType) {
+			// 選択している干支の場合にはスコアボーナス
+			uiManager.UpdateDisplayScore(Mathf.CeilToInt(GameData.instance.etoPoint * count * GameData.instance.etoRate), true);
+		} else {
+			// それ以外
+			uiManager.UpdateDisplayScore(GameData.instance.etoPoint * count, false);
+		}
+	}
 }

@@ -1166,7 +1166,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   etoDataList: []
   gameManager: {fileID: 0}
-  btnSkill: {fileID: 424740712}
   chooseBallColorNum: 0
   changeBallColorNum: 0
 --- !u!1 &439313998
@@ -3366,6 +3365,7 @@ GameObject:
   - component: {fileID: 1499865482}
   - component: {fileID: 1499865481}
   - component: {fileID: 1499865480}
+  - component: {fileID: 1499865483}
   m_Layer: 5
   m_Name: btnClosePopUp
   m_TagString: Untagged
@@ -3474,6 +3474,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1499865478}
   m_CullTransparentMesh: 0
+--- !u!225 &1499865483
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499865478}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1545577967
 GameObject:
   m_ObjectHideFlags: 0
@@ -3864,7 +3876,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   etoDataList: []
   gameManager: {fileID: 1884942870}
-  btnSkill: {fileID: 424740712}
   chooseBallColorNum: 0
   changeBallColorNum: 0
 --- !u!4 &1742992298

@@ -14,8 +14,6 @@ public class DataBaseManager : MonoBehaviour
     public List<EtoData> etoDataList = new List<EtoData>();
 
     public GameManager gameManager;
-    public Button btnSkill;
-
     
     [Header("変更元のボールの番号指定")]
     public int chooseBallColorNum;
@@ -39,7 +37,6 @@ public class DataBaseManager : MonoBehaviour
             }
         }
 
-
         switch (GameData.instance.skillType) {
             case SkillType.SingleToSingleChange:
                 //btnSkill.onClick.AddListener(() => gameManager.ChangeSpecificBalls(GameData.instance.etoDetail.etoType, GameData.instance.etoDetail.imgEto.sprite));
@@ -51,11 +48,12 @@ public class DataBaseManager : MonoBehaviour
                 //btnSkill.onClick.AddListener(gameManager.ChangeRandomBalls);
                 break;
             case SkillType.DeleteMaxBall:
-                btnSkill.onClick.AddListener(gameManager.DeleteMaxBalls);
+                gameManager.uiManager.btnSkill.onClick.AddListener(gameManager.DeleteMaxBalls);
                 break;
 
 
         }
-
+        // スキルを発動し、ボタンを押せなくする
+        gameManager.uiManager.btnSkill.onClick.AddListener(gameManager.uiManager.TriggerSkill);
     }
 }
