@@ -28,6 +28,8 @@ public class ModeSelectPopUp : MonoBehaviour
 
         // 各ボタンへのメソッドの登録
         btnStart.onClick.AddListener(OnClickStart);
+
+        Debug.Log("Init Mode");
     }
 
     // 各干支のボタンを生成する処理
@@ -42,6 +44,7 @@ public class ModeSelectPopUp : MonoBehaviour
                 // 初期は子を選択している状態にする
                 etoDetail.imgEto.color = new Color(0.65f, 0.65f, 0.65f);
                 GameData.instance.etoDetail = etoDetail;
+                GameData.instance.etoType = etoDetail.etoType;
             }
             gameManager.etoDetailList.Add(etoDetail);
             yield return new WaitForSeconds(0.15f);
@@ -51,8 +54,12 @@ public class ModeSelectPopUp : MonoBehaviour
 
     // ボタンを押されたら遷移する処理
     private void OnClickStart() {
+        // スタートボタンを押せないようにして重複タップを防止
         btnStart.interactable = false;
-        StartCoroutine(gameManager.CreateEtos(GameData.instance.createEtoCount));
+
+        // ゲームの準備開始
+        StartCoroutine(gameManager.PreparateGame());
+        //StartCoroutine(gameManager.CreateEtos(GameData.instance.createEtoCount));
 
         canvasGroup.DOFade(0.0f, 0.5f);
         canvasGroup.blocksRaycasts = false;

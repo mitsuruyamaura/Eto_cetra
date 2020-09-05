@@ -8,7 +8,11 @@ public class Wind : MonoBehaviour {
     float windTimer;
     public float duration;      // 発生時間
 
-    void Start() {
+    private UIManager uiManager;
+
+    public void SetUpWind(UIManager uiManager) {
+        this.uiManager = uiManager;
+
         capsuleCol = GetComponent<CapsuleCollider2D>();
         capsuleCol.enabled = false;
     }
@@ -50,7 +54,7 @@ public class Wind : MonoBehaviour {
             // 回転判定をなくす
             capsuleCol.enabled = false;
             // 再度ボタンを押せるようにする
-            UIManager.instance.StopUpdraft();
+            uiManager.StopUpdraft();
         }
     }
 }

@@ -6,15 +6,12 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager instance;
-
     public QuitCheckPouUp quitCheckPouUpPrefab;
     private QuitCheckPouUp quitCheckPouUp = null;
     public Transform canvasTran;
     public Text txtTimer;
     public Text txtScore;
 
-    public float timer;
     public Wind wind;
 
     public Button btnWind;
@@ -26,20 +23,12 @@ public class UIManager : MonoBehaviour
 
     private Tween tween = null;
 
-    void Awake() {
-        if (instance == null) {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            Destroy(gameObject);
-        }    
-    }
-
     void Start() {
         InactiveWind(false);
         btnWind.onClick.AddListener(CreateUpdraft);
         btnSkill.onClick.AddListener(TriggerSkill);
         btnSkill.interactable = false;
+        wind.SetUpWind(this);
     }
 
     public void InactiveWind(bool isSwitch) {
@@ -127,13 +116,13 @@ public class UIManager : MonoBehaviour
             //QuitGameManager.ExitGame();
         }
 
-        timer -= Time.deltaTime;
+        GameData.instance.gameTime -= Time.deltaTime;
         
-        if (timer <= 0) {
-            timer = 0;
-            gameManager.GameUp();
+        if (GameData.instance.gameTime <= 0) {
+            GameData.instance.gameTime = 0;
+            StartCoroutine(gameManager.GameUp());
         }
-        txtTimer.text = timer.ToString("F1");
+        txtTimer.text = GameData.instance.gameTime.ToString("F0");
     }
 
     /// <summary>
