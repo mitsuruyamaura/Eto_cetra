@@ -101,10 +101,6 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        if (gameManager.gameState != GameManager.GameState.Play) {
-            return;
-        }
-
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (quitCheckPouUp == null) {
                 // 終了確認用のポップアップを生成する。そのポップアップの中で終了確認を行う
@@ -115,6 +111,10 @@ public class UIManager : MonoBehaviour
             }
             //QuitGameManager.ExitGame();
         }
+
+        if (gameManager.gameState != GameManager.GameState.Play) {
+            return;
+        }       
 
         GameData.instance.gameTime -= Time.deltaTime;
         

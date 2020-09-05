@@ -2970,7 +2970,7 @@ PrefabInstance:
     - target: {fileID: 4041958917089146164, guid: d548dc15f955dee44a8343f381485b7f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 80.25
+      value: 590
       objectReference: {fileID: 0}
     - target: {fileID: 4041958917089146164, guid: d548dc15f955dee44a8343f381485b7f,
         type: 3}
@@ -2980,7 +2980,7 @@ PrefabInstance:
     - target: {fileID: 4041958917089146164, guid: d548dc15f955dee44a8343f381485b7f,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -761.4525
+      value: 258.13232
       objectReference: {fileID: 0}
     - target: {fileID: 4041958917089146164, guid: d548dc15f955dee44a8343f381485b7f,
         type: 3}
@@ -3641,7 +3641,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1602071697
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3962,25 +3962,16 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -1033.194, y: -60.040375}
-  - {x: -704.97363, y: -712.0049}
-  - {x: -650.42865, y: -696.38715}
-  - {x: -437.10107, y: -795.79175}
-  - {x: -440.75052, y: -843.20496}
-  - {x: -428.35193, y: -808.3585}
-  - {x: -65.17139, y: -872.1643}
-  - {x: -35.95906, y: -877.2965}
-  - {x: -20.24162, y: -852.7819}
-  - {x: 33.872032, y: -869.3742}
-  - {x: -34.24243, y: -924.621}
-  - {x: 33.707558, y: -853.87994}
-  - {x: 164.62442, y: -858.1639}
-  - {x: 343.70764, y: -859.3009}
-  - {x: 229.02106, y: -853.8015}
-  - {x: 632.9861, y: -628.23694}
-  - {x: 654.2054, y: -672.2148}
-  - {x: 649.42017, y: -647.52625}
-  - {x: 1009.1778, y: -60.04016}
+  - {x: -1467.0829, y: 14.169874}
+  - {x: -777.5013, y: -976.785}
+  - {x: -429.96213, y: -1242.4556}
+  - {x: -85.80801, y: -1343.9127}
+  - {x: -64.264465, y: -1310.7139}
+  - {x: -65.31607, y: -1320.371}
+  - {x: -11.4703455, y: -1333.2217}
+  - {x: 85.49849, y: -1314.2683}
+  - {x: 491.26736, y: -1230.46}
+  - {x: 1247.4496, y: -28.339813}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
