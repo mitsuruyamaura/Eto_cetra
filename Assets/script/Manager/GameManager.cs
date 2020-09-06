@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 
+		// 干支をつなげる処理
 		if (Input.GetMouseButtonDown(0) && firstEto == null) {
 			OnStartDrag();
 		} else if (Input.GetMouseButtonUp(0)) {
@@ -61,6 +63,17 @@ public class GameManager : MonoBehaviour
 		} else if (firstEto != null) {
 			OnDragging();
 		}
+
+		// ゲームの残り時間のカウント処理
+		GameData.instance.gameTime -= Time.deltaTime;
+
+		if (GameData.instance.gameTime <= 0) {
+			GameData.instance.gameTime = 0;
+			// ゲーム終了
+			StartCoroutine(GameUp());
+		}
+		// 残り時間の表示更新
+		uiManager.UpdateDisplayGameTime(GameData.instance.gameTime);
 	}
 
 	/// <summary>
@@ -178,7 +191,9 @@ public class GameManager : MonoBehaviour
 		gameState = GameState.Ready;
 
 		// ゲームに登場させる干支の種類を設定する
-		yield return StartCoroutine(ChooseEtoType(GameData.instance.etoTypeCount));
+		yield return StartCoroutine(SetUpEtoTypes(GameData.instance.etoTypeCount));
+
+		yield return StartCoroutine(SetUpSkill(GameData.instance.skillType));
 
         // 初回分の干支を生成
 		StartCoroutine(CreateEtos(GameData.instance.createEtoCount));
@@ -223,7 +238,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	/// <param name="typeCount"></param>
 	/// <returns></returns>
-	private IEnumerator ChooseEtoType(int typeCount) {
+	private IEnumerator SetUpEtoTypes(int typeCount) {
 		// 新しくリストを用意して初期化し、etoDeatilListを複製する
 		List<EtoDetail> chooseEtoList = new List<EtoDetail>(etoDetailList);
 
@@ -245,6 +260,29 @@ public class GameManager : MonoBehaviour
 			yield return null;
         }
     }
+
+	/// <summary>
+	/// 選択されたスキルをボタンに登録
+	/// </summary>
+	/// <param name="skillType"></param>
+	/// <returns></returns>
+	private IEnumerator SetUpSkill(SkillType skillType) {
+		
+
+
+		yield return StartCoroutine(uiManager.SetUpSkillButton(GetSkill(skillType)));
+    }
+
+	/// <summary>
+	/// スキルボタンに登録するスキルのメソッドを取得して戻す
+	/// </summary>
+	public UnityAction GetSkill(SkillType chooseSkillType) {
+		switch (chooseSkillType) {
+			case SkillType.DeleteMaxBall:
+				return DeleteMaxBalls;
+		}
+		return null;
+	}
 
 	/// <summary>
 	/// つながった干支を削除リストに追加
@@ -280,6 +318,12 @@ public class GameManager : MonoBehaviour
 	/// ゲーム終了ステートに変更
 	/// </summary>
 	public IEnumerator GameUp() {
+		// シャッフルを止める
+		uiManager.InactiveWind(false);
+
+		// ボタンを押せなくする
+		uiManager.InActiveButtons();
+
 		gameState = GameState.Result;
 		yield return new WaitForSeconds(1.5f);
 
@@ -297,8 +341,8 @@ public class GameManager : MonoBehaviour
 		sequence.Append(resultPopUp.transform.DOMoveY(0, 1.0f)).SetEase(Ease.Linear);
 		sequence.Append(resultPopUp.transform.DOPunchPosition(new Vector3(0, 0, 0), 0.5f))
 			.OnComplete(() => {
-				// 結果表示
-				resultPopUp.DisplayResult(eraseEtoCount, this);
+				// ゲーム結果表示
+				resultPopUp.DisplayResult(eraseEtoCount);
 			}
 		);
 

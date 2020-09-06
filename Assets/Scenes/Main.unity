@@ -1165,9 +1165,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   etoDataList: []
-  gameManager: {fileID: 0}
-  chooseBallColorNum: 0
-  changeBallColorNum: 0
 --- !u!1 &439313998
 GameObject:
   m_ObjectHideFlags: 0
@@ -3159,7 +3156,6 @@ MonoBehaviour:
   btnWind: {fileID: 37439042}
   btnSkill: {fileID: 424740712}
   imgSkill: {fileID: 1587521537}
-  gameManager: {fileID: 1884942870}
 --- !u!4 &1438137721
 Transform:
   m_ObjectHideFlags: 0
@@ -3861,7 +3857,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1742992297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3875,9 +3871,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   etoDataList: []
-  gameManager: {fileID: 1884942870}
-  chooseBallColorNum: 0
-  changeBallColorNum: 0
 --- !u!4 &1742992298
 Transform:
   m_ObjectHideFlags: 0
@@ -3929,7 +3922,7 @@ MonoBehaviour:
   score: 0
   etoPoint: 100
   etoRate: 3
-  initTime: 60
+  initTime: 5
   gameTime: 0
 --- !u!4 &1765334887
 Transform:
@@ -3977,11 +3970,16 @@ EdgeCollider2D:
   - {x: -777.5013, y: -976.785}
   - {x: -429.96213, y: -1242.4556}
   - {x: -85.80801, y: -1343.9127}
+  - {x: -51.747997, y: -1321.2632}
   - {x: -64.264465, y: -1310.7139}
   - {x: -65.31607, y: -1320.371}
   - {x: -11.4703455, y: -1333.2217}
   - {x: 85.49849, y: -1314.2683}
+  - {x: 251.79942, y: -1272.5458}
+  - {x: 470.27917, y: -1181.7899}
   - {x: 491.26736, y: -1230.46}
+  - {x: 471.94025, y: -1157.4803}
+  - {x: 706.8858, y: -905.81177}
   - {x: 1247.4496, y: -28.339813}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}

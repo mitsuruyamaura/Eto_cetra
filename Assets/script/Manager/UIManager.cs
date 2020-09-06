@@ -1,7 +1,9 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -19,34 +21,61 @@ public class UIManager : MonoBehaviour
 
     public Image imgSkill;
 
-    public GameManager gameManager;
-
     private Tweener tweener = null;
 
+    private UnityEvent unityEvent;
+
     void Start() {
+        // シャッフル機能の設定
         InactiveWind(false);
-        btnWind.onClick.AddListener(CreateUpdraft);
-        //btnSkill.onClick.AddListener(TriggerSkill);
-        btnSkill.interactable = false;
         wind.SetUpWind(this);
+
+        // シャッフルボタンにメソッドを登録
+        btnWind.onClick.AddListener(CreateUpdraft);
     }
 
+    /// <summary>
+    /// 選択した干支の持つスキルを登録
+    /// </summary>
+    /// <param name="skillType"></param>
+    /// <returns></returns>
+    public IEnumerator SetUpSkillButton(UnityAction unityAction) {
+        // UnityEvent初期化
+        unityEvent = new UnityEvent();
+
+        // UnityEventにメソッドを登録(干支のタイプを渡して、その干支の持つスキルの呼び出しメソッドを取得)
+        unityEvent.AddListener(unityAction);
+
+        // スキルボタンにメソッドを登録
+        btnSkill.onClick.AddListener(TriggerSkill);
+
+        // スキルポイントが0からスタートするので、スキルボタンを押せなくしておく
+        btnSkill.interactable = false;
+
+        yield break;
+    }
+
+    /// <summary>
+    /// シャッフル用ゲームオブジェクトのオンオフ切り替え
+    /// </summary>
+    /// <param name="isSwitch"></param>
     public void InactiveWind(bool isSwitch) {
         btnWind.gameObject.SetActive(isSwitch);
     }
 
-
+    /// <summary>
+    /// シャッフル開始
+    /// </summary>
     private void CreateUpdraft() {
-        if (gameManager.gameState != GameManager.GameState.Play) {
-            return;
-        }
         wind.Updraft();
         btnWind.interactable = false;
 
         // コルーチン化して、Trueに戻してもいいかも
-
     }
 
+    /// <summary>
+    /// シャッフル停止
+    /// </summary>
     public void StopUpdraft() {
         btnWind.interactable = true;
     }
@@ -55,11 +84,17 @@ public class UIManager : MonoBehaviour
     /// スキル使用
     /// </summary>
     public void TriggerSkill() {
+        // ボタンの重複タップ防止
         btnSkill.interactable = false;
+
+        // 登録されているスキルを使用
+        unityEvent.Invoke();
+
+        // スキルポイント関連を初期化
         imgSkill.DOFillAmount(0, 1.0f);
         tweener.Kill();
         tweener = null;
-        Debug.Log(tweener);
+
         imgSkill.transform.localScale = Vector3.one;
     }
 
@@ -100,6 +135,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ゲームの残り時間の表示更新
+    /// </summary>
+    /// <param name="time"></param>
+    public void UpdateDisplayGameTime(float time) {
+        txtTimer.text = time.ToString("F0");
+    }
+
+    public void InActiveButtons() {
+        btnSkill.interactable = false;
+        btnWind.interactable = false;
+    }
 
     void Update()
     {
@@ -113,18 +160,6 @@ public class UIManager : MonoBehaviour
             }
             //QuitGameManager.ExitGame();
         }
-
-        if (gameManager.gameState != GameManager.GameState.Play) {
-            return;
-        }       
-
-        GameData.instance.gameTime -= Time.deltaTime;
-        
-        if (GameData.instance.gameTime <= 0) {
-            GameData.instance.gameTime = 0;
-            StartCoroutine(gameManager.GameUp());
-        }
-        txtTimer.text = GameData.instance.gameTime.ToString("F0");
     }
 
     /// <summary>

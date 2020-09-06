@@ -11,16 +11,17 @@ public class ResultPopUp : MonoBehaviour
     public Button btnClosePopUp;
 
     private float posY;
-    private GameManager gameManager;
 
     void Start() {
         posY = transform.position.y;
         btnClosePopUp.gameObject.GetComponent<CanvasGroup>().alpha = 0.0f;
     }
 
-    public void DisplayResult(int eraseEtoCount, GameManager gameManager) {
-        this.gameManager = gameManager;
-
+    /// <summary>
+    /// ゲーム結果(点数と消した干支の数)をアニメ表示
+    /// </summary>
+    /// <param name="eraseEtoCount"></param>
+    public void DisplayResult(int eraseEtoCount) {
         btnClosePopUp.onClick.AddListener(OnClickMovePopUp);
 
         int initValue = 0;
@@ -42,13 +43,15 @@ public class ResultPopUp : MonoBehaviour
                         txtEraseEtoCount.text = num.ToString();
                     },
                     eraseEtoCount,
-                    1.0f).SetEase(Ease.InCirc)).OnComplete(() => {
-                        sequence.AppendInterval(0.5f);
-                        btnClosePopUp.gameObject.GetComponent<CanvasGroup>().alpha = 1.0f;       
-                        }
-                    );           
+                    1.0f).SetEase(Ease.InCirc));
+                    
+        sequence.AppendInterval(1.0f);
+        sequence.Append(btnClosePopUp.gameObject.GetComponent<CanvasGroup>().DOFade(1.0f, 1.0f).SetEase(Ease.Linear));
     }
 
+    /// <summary>
+    /// リザルト表示を元の位置に戻して、ゲームをリスタートする
+    /// </summary>
     private void OnClickMovePopUp() {
         btnClosePopUp.interactable = false;
 
