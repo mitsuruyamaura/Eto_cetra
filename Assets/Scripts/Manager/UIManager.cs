@@ -1,37 +1,55 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [HideInInspector]
     public QuitCheckPouUp quitCheckPouUpPrefab;
+
     private QuitCheckPouUp quitCheckPouUp = null;
+
+    [HideInInspector]
     public Transform canvasTran;
+
     public Text txtTimer;
     public Text txtScore;
 
-    public Wind wind;
+    [SerializeField]
+    private Shuffle shuffle;
 
-    public Button btnWind;
+    [SerializeField]
+    private Button btnShuffle;
+
+
+    // 未
+
+    [HideInInspector]
     public Button btnSkill;
 
+    [HideInInspector]
     public Image imgSkill;
 
     private Tweener tweener = null;
 
     private UnityEvent unityEvent;
 
-    void Start() {
+    /// <summary>
+    /// UIManagerの初期設定
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator Initialize()() {
+        // シャッフルボタンを非活性化(半透明の押せない状態にする)
+        ActivateShuffleButton(false);
+
         // シャッフル機能の設定
-        InactiveWind(false);
-        wind.SetUpWind(this);
+        shuffle.SetUpShuffle(this);
 
         // シャッフルボタンにメソッドを登録
-        btnWind.onClick.AddListener(CreateUpdraft);
+        btnShuffle.onClick.AddListener(TriggerShuffle);
     }
 
     /// <summary>
@@ -56,28 +74,22 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// シャッフル用ゲームオブジェクトのオンオフ切り替え
+    /// シャッフルボタンの活性化/非活性化の切り替え
     /// </summary>
     /// <param name="isSwitch"></param>
-    public void InactiveWind(bool isSwitch) {
-        btnWind.gameObject.SetActive(isSwitch);
+    public void ActivateShuffleButton(bool isSwitch) {
+        btnShuffle.interactable = isSwitch;
     }
 
     /// <summary>
-    /// シャッフル開始
+    /// シャッフル実行
     /// </summary>
-    private void CreateUpdraft() {
-        wind.Updraft();
-        btnWind.interactable = false;
+    private void TriggerShuffle() {
+        // シャッフルボタンを押せなくする。重複タップ防止
+        ActivateShuffleButton(false);
 
-        // コルーチン化して、Trueに戻してもいいかも
-    }
-
-    /// <summary>
-    /// シャッフル停止
-    /// </summary>
-    public void StopUpdraft() {
-        btnWind.interactable = true;
+        // シャッフル開始
+        shuffle.StartShuffle();
     }
 
     /// <summary>
@@ -99,13 +111,9 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// スコア加算処理
+    /// 画面表示スコアの更新処理
     /// </summary>
-    /// <param name="amount"></param>
-    public void UpdateDisplayScore(int amount, bool isChooseEto) {
-        GameData.instance.score += amount;
-        Debug.Log(GameData.instance.score);
-
+    public void UpdateDisplayScore(bool isChooseEto = false) {
         if (isChooseEto) {
             // 自分の干支の場合には点数を大きく表示する演出を入れる
             Sequence sequence = DOTween.Sequence();
@@ -113,9 +121,8 @@ public class UIManager : MonoBehaviour
             sequence.AppendInterval(0.1f);
             sequence.Append(txtScore.transform.DOScale(Vector3.one, 0.1f)).SetEase(Ease.Linear);
         }
-        
-        // 徐々に加算処理にする
 
+        // 画面に表示しているスコアの値を更新
         txtScore.text = GameData.instance.score.ToString();
     }
 
@@ -145,7 +152,7 @@ public class UIManager : MonoBehaviour
 
     public void InActiveButtons() {
         btnSkill.interactable = false;
-        btnWind.interactable = false;
+        btnShuffle.interactable = false;
     }
 
     void Update()

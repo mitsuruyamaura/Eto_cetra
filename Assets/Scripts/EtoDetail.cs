@@ -19,14 +19,14 @@ public class EtoDetail : MonoBehaviour
     public CanvasGroup canvasGroup;
 
     // 設定
-    public void SetUpEtoDetail(ModeSelectPopUp modeSelectPopUp, int etoNo, Sprite eTosprite) {
+    public void SetUpEtoDetail(ModeSelectPopUp modeSelectPopUp, int etoNo, Sprite etoSprite) {
         canvasGroup.alpha = 0.0f;
 
         this.modeSelectPopUp = modeSelectPopUp;
 
         etoType = (EtoType)etoNo;
 
-        imgEto.sprite = eTosprite;
+        imgEto.sprite = etoSprite;
 
         btnEto.onClick.AddListener(()=> StartCoroutine(OnClickEtoDetail()));
 

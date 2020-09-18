@@ -4,51 +4,116 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine.Events;
+using System.Security.Cryptography.X509Certificates;
+using System.Reflection;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 {
 	public Eto etoPrefab;
 
-	private Eto firstEto;
-	private Eto lastEto;
-	private EtoType? currentEtoType;
-	public List<Eto> removeEtoList = new List<Eto>();
+	public Transform etoSetTran;
 
-	// 生成されている干支
+	public float maxRotateAngle = 40.0f;
+
+	[SerializeField, Header("生成された干支のリスト")]
 	private List<Eto> etoList = new List<Eto>();
 
-	public Transform etoSetTran;
+	//[SerializeField, Header("干支の画像データ")]
+	//private Sprite[] etoSprites;
+
+	private Eto firstSelectEto;
+	private Eto lastSelectEto;
+	private EtoType? currentEtoType;
+    public List<Eto> eraseEtoList = new List<Eto>();
 
 	public int linkCount = 0;
 
 	public float etoDistance = 1.0f;
 
-	public float maxRotateAngle = 40.0f;
+	[SerializeField]
+	private UIManager uiManager;
 
-	// 干支12種類のList(干支ボタン生成とゲームに登場する干支の種類を決める際に使用する)
-	public List<EtoDetail> etoDetailList = new List<EtoDetail>();
-
-	[Header("今回のゲームに登場する干支")]
-	public List<EtoDetail> selectedEtoList = new List<EtoDetail>();
-
-	public enum GameState {
+	/// <summary>
+    /// ゲームの進行状況
+    /// </summary>
+	public enum GameState
+	{
 		Select,
 		Ready,
 		Play,
 		Result
-    }
+	}
+
+	[Header("現在のゲームの進行状況")]
 	public GameState gameState = GameState.Select;
 
-	public UIManager uiManager;
+	private float timer;
 
-	public ResultPopUp resultPopUp;
-	public Transform canvasTran;
+	[SerializeField]
+	private ResultPopUp resultPopUp;
 
-	public int eraseEtoCount = 0;
+	[SerializeField, Header("今回のゲームで生成する干支の種類")]
+	private List<GameData.EtoData> selectedEtoDataList = new List<GameData.EtoData>();
 
-    void Start() {
-		//StartCoroutine(CreateEtos(generateBallCount));
+	//[SerializeField, Header("今回のゲームに登場する干支")]
+	//private List<EtoDetail> selectedEtoList = new List<EtoDetail>();
+
+	//　未
+
+	// 干支12種類のList(干支ボタン生成とゲームに登場する干支の種類を決める際に使用する)
+	public List<EtoDetail> etoDetailList = new List<EtoDetail>();
+
+
+	IEnumerator Start() {
+		// ステートを準備中に変更
+		gameState = GameState.Ready;
+
+		// UIManagerの初期設定
+		yield return StartCoroutine(uiManager.Initialize());
+
+		// 干支データのリストが作成されてなければ
+		if (GameData.instance.etoDataList.Count == 0) {
+			//Sprite[] etoSprites = new Sprite[(int)currentEtoType.Count];
+			// 干支の画像を読みこむ。この処理が終了するまで、次の処理へはいかないようにする
+			//yield return StartCoroutine(LoadEtoSprites());
+
+			// 干支データのリストを作成。この処理が終了するまで、次の処理へはいかないようにする
+			yield return StartCoroutine(GameData.instance.InitEtoDataList());
+		}
+
+		// TODO 干支の選択ポップアップを表示
+
+
+		// 生成する干支をランダムで選択。この処理が終了するまで、次の処理へはいかないようにする
+		yield return StartCoroutine(SetUpEtoTypes(GameData.instance.etoTypeCount));
+
+		// 残り時間の表示
+		uiManager.UpdateDisplayGameTime(GameData.instance.gameTime);
+
+		// 引数で指定した数の干支を生成する
+		StartCoroutine(CreateEtos(GameData.instance.createEtoCount));
 	}
+
+	/// <summary>
+	/// 干支の画像を読み込んで配列から使用できるようにする
+	/// </summary>
+	private IEnumerator LoadEtoSprites()
+	{
+		// 配列の初期化(12個の画像が入るようにSprite型の配列を12個用意する)
+		//etoSprites = new Sprite[(int)EtoType.Count];
+
+		 // Resources.LoadAllを行い、分割されている干支の画像を順番にすべて読み込んで配列に代入
+		//etoSprites = Resources.LoadAll<Sprite>("Sprites/eto");
+
+		// １つのファイルを１２分割していない場合には、以下の処理を使います。
+		//for (int i = 0; i < etoSprites.Length; i++)
+		//{
+		//	etoSprites[i] = Resources.Load<Sprite>("Sprites/eto_" + i);
+		//}
+
+		yield break;
+	}
+
 
 	void Update() {
 		if (gameState != GameState.Play) {
@@ -56,24 +121,30 @@ public class GameManager : MonoBehaviour
 		}
 
 		// 干支をつなげる処理
-		if (Input.GetMouseButtonDown(0) && firstEto == null) {
+		if (Input.GetMouseButtonDown(0) && firstSelectEto == null) {
 			OnStartDrag();
 		} else if (Input.GetMouseButtonUp(0)) {
 			OnEndDrag();
-		} else if (firstEto != null) {
+		} else if (firstSelectEto != null) {
 			OnDragging();
 		}
 
 		// ゲームの残り時間のカウント処理
-		GameData.instance.gameTime -= Time.deltaTime;
+		timer += Time.deltaTime;
 
-		if (GameData.instance.gameTime <= 0) {
-			GameData.instance.gameTime = 0;
-			// ゲーム終了
-			StartCoroutine(GameUp());
+		if (timer >= 1) {
+			timer = 0;
+			GameData.instance.gameTime--;
+
+			if (GameData.instance.gameTime <= 0)
+			{
+				GameData.instance.gameTime = 0;
+				// ゲーム終了
+				StartCoroutine(GameUp());
+			}
+			// 残り時間の表示更新
+			uiManager.UpdateDisplayGameTime(GameData.instance.gameTime);
 		}
-		// 残り時間の表示更新
-		uiManager.UpdateDisplayGameTime(GameData.instance.gameTime);
 	}
 
 	/// <summary>
@@ -87,19 +158,22 @@ public class GameManager : MonoBehaviour
 		
 		if (hit.collider != null) {			
 			if(hit.collider.gameObject.TryGetComponent(out Eto dragEto)) { 
-				firstEto = dragEto;
-				lastEto = dragEto;
+				firstSelectEto = dragEto;
+				lastSelectEto = dragEto;
 				currentEtoType = dragEto.etoType;
 
 				dragEto.isSelected = true;
 				dragEto.num = linkCount;
 
-				removeEtoList = new List<Eto>();
-				AddSelectedBallList(dragEto);
+				eraseEtoList = new List<Eto>();
+				AddEraseEtolList(dragEto);
 			}
 		}
 	}
 
+	/// <summary>
+    /// 干支のドラッグ中（スワイプ）処理
+    /// </summary>
 	private void OnDragging() {
 		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 		if (hit.collider != null && hit.collider.gameObject.TryGetComponent(out Eto dragEto)) {
@@ -107,49 +181,52 @@ public class GameManager : MonoBehaviour
 				return;
             }
 
-			if (dragEto.etoType == currentEtoType && lastEto != dragEto && !dragEto.isSelected) {
-				float distance = Vector2.Distance(dragEto.transform.position, lastEto.transform.position);
+			if (dragEto.etoType == currentEtoType && lastSelectEto != dragEto && !dragEto.isSelected) {
+				float distance = Vector2.Distance(dragEto.transform.position, lastSelectEto.transform.position);
 				if (distance < etoDistance) {
 					dragEto.isSelected = true;
 
-					lastEto = dragEto;
+					lastSelectEto = dragEto;
 
 					linkCount++;
 					dragEto.num = linkCount;
-					AddSelectedBallList(dragEto);
+					AddEraseEtolList(dragEto);
 					
 				}
 			}
 			Debug.Log(dragEto.etoType);
 
-			if (removeEtoList.Count > 1) {
+			if (eraseEtoList.Count > 1) {
 				Debug.Log(dragEto.num);
-				if (removeEtoList[linkCount - 1] != lastEto && removeEtoList[linkCount - 1].num == dragEto.num && dragEto.isSelected) {
+				if (eraseEtoList[linkCount - 1] != lastSelectEto && eraseEtoList[linkCount - 1].num == dragEto.num && dragEto.isSelected) {
 					
 					// 選択中のボールを取り除く 
-					RemoveSelectedBallList(lastEto);
-					lastEto.GetComponent<Eto>().isSelected = false;
+					RemoveEraseEtoList(lastSelectEto);
+					lastSelectEto.GetComponent<Eto>().isSelected = false;
 
 					// 最後のボールの情報を、前のボールに戻す
-					lastEto = dragEto;
+					lastSelectEto = dragEto;
 					linkCount--;
 				}
 			}
 		}
 	}
 
+	/// <summary>
+    /// 干支のドラッグをやめた（指を画面から離した）際の処理
+    /// </summary>
 	private void OnEndDrag() {
-		if (removeEtoList.Count >= 3) {
+		if (eraseEtoList.Count >= 3) {
 			// 選択されている干支を消す
-			for (int i = 0; i < removeEtoList.Count; i++) {
+			for (int i = 0; i < eraseEtoList.Count; i++) {
 				// 干支リストから取り除く
-				etoList.Remove(removeEtoList[i]);
+				etoList.Remove(eraseEtoList[i]);
 				// 干支を削除
-				Destroy(removeEtoList[i].gameObject);
+				Destroy(eraseEtoList[i].gameObject);
 			}
 
 			// スコアと消した干支の数の加算
-			AddScores(currentEtoType, removeEtoList.Count);
+			AddScores(currentEtoType, eraseEtoList.Count);
 
 			//// スキルポイント加算
 			//uiManager.AddSkillPoint(removeEtoList.Count);
@@ -169,17 +246,17 @@ public class GameManager : MonoBehaviour
 			// TODO ４つ以上消えていたら、ボーナス
 
 			// 消した干支の数だけ新しい干支をランダムに生成
-			StartCoroutine(CreateEtos(removeEtoList.Count));
-			removeEtoList.Clear();
+			StartCoroutine(CreateEtos(eraseEtoList.Count));
+			eraseEtoList.Clear();
 		} else {
-			for (int i = 0; i < removeEtoList.Count; i++) {
+			for (int i = 0; i < eraseEtoList.Count; i++) {
 				// 選んだ数か2個以下の場合　各干支のboolを解除する
-				removeEtoList[i].isSelected = false;　
-				ChangeBallColorAlpha(removeEtoList[i], 1.0f);
+				eraseEtoList[i].isSelected = false;　
+				ChangeEtoAlpha(eraseEtoList[i], 1.0f);
 			}
 		}
-		firstEto = null;
-		lastEto = null;
+		firstSelectEto = null;
+		lastSelectEto = null;
 		currentEtoType = null;
 	}
 
@@ -187,8 +264,11 @@ public class GameManager : MonoBehaviour
 	/// ゲームの準備
 	/// </summary>
 	public IEnumerator PreparateGame() {
-		// ステートを準備中に変更
+		// TODO ステートを準備中に変更
 		gameState = GameState.Ready;
+
+		// 残り時間の表示
+		//uiManager.UpdateDisplayGameTime(GameData.instance.gameTime);
 
 		// ゲームに登場させる干支の種類を設定する
 		yield return StartCoroutine(SetUpEtoTypes(GameData.instance.etoTypeCount));
@@ -196,7 +276,7 @@ public class GameManager : MonoBehaviour
 		yield return StartCoroutine(SetUpSkill(GameData.instance.skillType));
 
         // 初回分の干支を生成
-		StartCoroutine(CreateEtos(GameData.instance.createEtoCount));
+		StartCoroutine(CreateEtos(GameData.instance.createEtoCount));		
 	}
 
 	/// <summary>
@@ -204,9 +284,9 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	/// <param name="count"></param>
 	/// <returns></returns>
-	public IEnumerator CreateEtos(int count) {
+	private IEnumerator CreateEtos(int count) {
 		// 生成中はシャッフルボタンを押せないようにする
-		uiManager.InactiveWind(false);
+		uiManager.ActivateShuffleButton(false);
 
         for (int i = 0; i < count; i++) {
             // Ballプレファブを生成し、Ballクラスに代入
@@ -214,18 +294,29 @@ public class GameManager : MonoBehaviour
             eto.transform.rotation = Quaternion.AngleAxis(Random.Range(-maxRotateAngle, maxRotateAngle), Vector3.forward);
             eto.transform.localPosition = new Vector2(Random.Range(-400.0f, 400.0f), 1400f);
 
-            // 今回のゲームに登場する干支の中から、ランダムな干支を１つ選択
-            int randomVelue = Random.Range(0, selectedEtoList.Count);
+			// 今回のゲームに登場する干支の中から、ランダムな干支を１つ選択
+			int randomValue = Random.Range(0, selectedEtoDataList.Count);
 
-            // Ballの初期設定
-            eto.SetUpBall(selectedEtoList[randomVelue].etoType, selectedEtoList[randomVelue].imgEto.sprite);
+            // 干支の初期設定
+            eto.SetUpEto(selectedEtoDataList[randomValue].etoType, selectedEtoDataList[randomValue].sprite);
 
-            // ballListに追加
-            etoList.Add(eto);
 
-            yield return new WaitForSeconds(0.05f);
+			// 干支のListに追加
+			//etoList.Add(eto);
+
+			// ランダムな干支を12種類の中から１つ選択
+			//int randomValue = Random.Range(0, (int)EtoType.Count);
+
+			//// 生成された干支の初期設定(干支の種類と干支の画像を引数を使ってEtoへ渡す)
+			//eto.SetUpEto((EtoType)randomValue, etoSprites[randomValue]);
+
+			etoList.Add(eto);
+
+			yield return new WaitForSeconds(0.03f);
         }
-		uiManager.InactiveWind(true);
+
+		// シャッフルボタンを押せるようにする
+		uiManager.ActivateShuffleButton(true);
 
 		// ステートが準備中のときだけゲーム開始に変更
         if (gameState == GameState.Ready) {
@@ -239,27 +330,31 @@ public class GameManager : MonoBehaviour
 	/// <param name="typeCount"></param>
 	/// <returns></returns>
 	private IEnumerator SetUpEtoTypes(int typeCount) {
-		// 新しくリストを用意して初期化し、etoDeatilListを複製する
-		List<EtoDetail> chooseEtoList = new List<EtoDetail>(etoDetailList);
 
-		// 選択中の干支を選んでリストに追加する
-		EtoDetail myEto = chooseEtoList.Find((x) => x.etoType == GameData.instance.etoType);
-		selectedEtoList.Add(myEto);
-		chooseEtoList.Remove(myEto);
-		typeCount--;
+		// 新しくリストを用意して初期化に合わせてetoDataListを複製して、干支の候補リストとする
+		List<GameData.EtoData> candidateEtoDataList = new List<GameData.EtoData>(GameData.instance.etoDataList);
 
-        // それ以外の干支を指定数だけをランダムに選ぶ
-        while (typeCount > 0) {
+		// TODO 選択中の干支を選んでリストに追加する
+		//EtoDetail myEto = chooseEtoList.Find((x) => x.etoType == GameData.instance.etoType);
+		//selectedEtoList.Add(myEto);
+		//chooseEtoList.Remove(myEto);
+		//typeCount--;
+
+		// それ以外の干支を指定数だけをランダムに選ぶ
+		while (typeCount > 0)
+		{
 			// ランダムに数字を選ぶ
-			int randomValue = Random.Range(0, chooseEtoList.Count);
-			// リストに追加
-			selectedEtoList.Add(chooseEtoList[randomValue]);
+			int randomValue = Random.Range(0, candidateEtoDataList.Count);
+
+			// 生成する干支のリストに追加
+			selectedEtoDataList.Add(candidateEtoDataList[randomValue]);
+
 			// 選択範囲のリストから削除
-			chooseEtoList.Remove(chooseEtoList[randomValue]);
+			candidateEtoDataList.Remove(candidateEtoDataList[randomValue]);
 			typeCount--;
 			yield return null;
-        }
-    }
+		}
+	}
 
 	/// <summary>
 	/// 選択されたスキルをボタンに登録
@@ -267,9 +362,6 @@ public class GameManager : MonoBehaviour
 	/// <param name="skillType"></param>
 	/// <returns></returns>
 	private IEnumerator SetUpSkill(SkillType skillType) {
-		
-
-
 		yield return StartCoroutine(uiManager.SetUpSkillButton(GetSkill(skillType)));
     }
 
@@ -287,19 +379,19 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// つながった干支を削除リストに追加
 	/// </summary>
-	/// <param name="obj"></param>
-	void AddSelectedBallList(Eto dragEto) {
-		removeEtoList.Add(dragEto);
-		ChangeBallColorAlpha(dragEto, 0.5f);
+	/// <param name="dragEto"></param>
+	void AddEraseEtolList(Eto dragEto) {
+		eraseEtoList.Add(dragEto);
+		ChangeEtoAlpha(dragEto, 0.5f);
 	}
 
 	/// <summary>
 	/// 前の干支に戻った際に削除リストから削除
 	/// </summary>
-	/// <param name="obj"></param>
-	private void RemoveSelectedBallList(Eto dragEto) {
-		removeEtoList.Remove(dragEto);
-		ChangeBallColorAlpha(dragEto, 1.0f);
+	/// <param name="dragEto"></param>
+	private void RemoveEraseEtoList(Eto dragEto) {
+		eraseEtoList.Remove(dragEto);
+		ChangeEtoAlpha(dragEto, 1.0f);
         if (dragEto.isSelected) {
 			dragEto.isSelected = false;
 		}
@@ -308,21 +400,21 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// 干支のアルファを変更
 	/// </summary>
-	/// <param name="obj"></param>
-	/// <param name="transparency"></param>
-	private void ChangeBallColorAlpha(Eto dragEto, float transparency) {
-		dragEto.imgEto.color = new Color(dragEto.imgEto.color.r, dragEto.imgEto.color.g, dragEto.imgEto.color.b, transparency);
+	/// <param name="dragEto"></param>
+	/// <param name="alphaValue"></param>
+	private void ChangeEtoAlpha(Eto dragEto, float alphaValue) {
+		dragEto.imgEto.color = new Color(dragEto.imgEto.color.r, dragEto.imgEto.color.g, dragEto.imgEto.color.b, alphaValue);
 	}
 
 	/// <summary>
 	/// ゲーム終了ステートに変更
 	/// </summary>
-	public IEnumerator GameUp() {
-		// シャッフルを止める
-		uiManager.InactiveWind(false);
+	private IEnumerator GameUp() {
+		// シャッフルボタンを非活性化して押せなくする
+		uiManager.ActivateShuffleButton(false);
 
 		// ボタンを押せなくする
-		uiManager.InActiveButtons();
+		//uiManager.InActiveButtons();
 
 		gameState = GameState.Result;
 		yield return new WaitForSeconds(1.5f);
@@ -335,16 +427,23 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	/// <returns></returns>
 	private IEnumerator MoveResultPopUp() {
-		resultPopUp.gameObject.SetActive(true);
+		// 
+		//resultPopUp.gameObject.SetActive(true);
 
-		Sequence sequence = DOTween.Sequence();
-		sequence.Append(resultPopUp.transform.DOMoveY(0, 1.0f)).SetEase(Ease.Linear);
-		sequence.Append(resultPopUp.transform.DOPunchPosition(new Vector3(0, 0, 0), 0.5f))
-			.OnComplete(() => {
-				// ゲーム結果表示
-				resultPopUp.DisplayResult(eraseEtoCount);
-			}
-		);
+		resultPopUp.transform.DOMoveY(0, 1.0f).SetEase(Ease.Linear).OnComplete(() => {
+			// ゲーム結果表示
+			resultPopUp.DisplayResult(GameData.instance.score, GameData.instance.eraseEtoCount);
+			//Debug.Log("リザルト内容を表示します");
+		});
+
+		//Sequence sequence = DOTween.Sequence();
+		//sequence.Append(resultPopUp.transform.DOMoveY(0, 1.0f)).SetEase(Ease.Linear);
+		//sequence.Append(resultPopUp.transform.DOPunchPosition(new Vector3(0, 0, 0), 0.5f))
+		//	.OnComplete(() => {
+		//		// ゲーム結果表示
+		//		resultPopUp.DisplayResult(GameData.instance.eraseEtoCount);
+		//	}
+		//);
 
 		yield return new WaitForSeconds(1.0f);
     }
@@ -403,11 +502,11 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// すべてのボールをランダムな色に変更する
 	/// </summary>
-	public void ChangeRandomBalls() {
-		for (int i = 0; i < etoList.Count; i++) {
-			etoList[i].ChangeBallColor(selectedEtoList[Random.Range(0, selectedEtoList.Count)].imgEto.sprite);
-		}
-	}
+	//public void ChangeRandomBalls() {
+	//	for (int i = 0; i < etoList.Count; i++) {
+	//		etoList[i].ChangeBallColor(selectedEtoList[Random.Range(0, selectedEtoList.Count)].imgEto.sprite);
+	//	}
+	//}
 
 	// 自分の干支以外で一番数の多い干支をすべて自分の干支に変える
 
@@ -461,20 +560,40 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// スコアと消した干支の数を加算
 	/// </summary>
+	/// <param name="etoType">消した干支の種類</param>
+	/// <param name="count">消した干支の数</param>
 	private void AddScores(EtoType? etoType, int count) {
 		// スキルポイント加算
 		uiManager.AddSkillPoint(count);
 
-		// 消した数を加算
-		eraseEtoCount += count;
-
-		// スコア加算処理
+		// スコアを加算
+		bool isMyEto = false;
 		if (etoType == GameData.instance.etoType) {
-			// 選択している干支の場合にはスコアボーナス
-			uiManager.UpdateDisplayScore(Mathf.CeilToInt(GameData.instance.etoPoint * count * GameData.instance.etoRate), true);
+			GameData.instance.score += Mathf.CeilToInt(GameData.instance.etoPoint * count * GameData.instance.etoRate);
+			isMyEto = true;
 		} else {
-			// それ以外
-			uiManager.UpdateDisplayScore(GameData.instance.etoPoint * count, false);
+			GameData.instance.score += GameData.instance.etoPoint * count;
 		}
+
+		// 消した数を加算
+		GameData.instance.eraseEtoCount += count;
+
+		// 画面に表示されているスコアの更新
+		uiManager.UpdateDisplayScore(isMyEto);
 	}
+
+	/// <summary>
+    /// 干支の基本情報
+    /// </summary>
+	//[System.Serializable]
+	//public class EtoOrigin
+ //   {
+	//	public EtoType etoType;
+	//	public Sprite sprite;
+
+	//	public EtoOrigin(EtoType etoType, Sprite sprite) {
+	//		this.etoType = etoType;
+	//		this.sprite = sprite;
+	//	}
+ //   }
 }

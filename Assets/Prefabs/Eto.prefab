@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fc58fa5f6707dc4cb63b60e05191d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  etoNum: 0
+  etoType: 0
   imgEto: {fileID: 8115274336856124562}
   isSelected: 0
   num: 0

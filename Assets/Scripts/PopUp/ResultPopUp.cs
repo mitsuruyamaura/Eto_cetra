@@ -21,7 +21,7 @@ public class ResultPopUp : MonoBehaviour
     /// ゲーム結果(点数と消した干支の数)をアニメ表示
     /// </summary>
     /// <param name="eraseEtoCount"></param>
-    public void DisplayResult(int eraseEtoCount) {
+    public void DisplayResult(int score, int eraseEtoCount) {
         btnClosePopUp.onClick.AddListener(OnClickMovePopUp);
 
         int initValue = 0;
@@ -32,7 +32,7 @@ public class ResultPopUp : MonoBehaviour
                         initValue = num;
                         txtScore.text = num.ToString();
                     },
-                    GameData.instance.score,
+                    score,
                     1.0f).SetEase(Ease.InCirc));
         sequence.AppendInterval(0.5f);
 
