@@ -239,7 +239,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -355, y: -985}
+  m_AnchoredPosition: {x: -355, y: 0}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &50724541
@@ -1316,7 +1316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 998.2}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &837790343
@@ -1487,8 +1487,8 @@ GameObject:
   m_Component:
   - component: {fileID: 923303907}
   - component: {fileID: 923303909}
-  - component: {fileID: 923303908}
   - component: {fileID: 923303910}
+  - component: {fileID: 923303908}
   m_Layer: 5
   m_Name: Shuffle
   m_TagString: Untagged
@@ -1527,8 +1527,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c6e3f5f6c27784fb5833117af0be8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coefficient: 10
-  shufflePower: {x: 10, y: 10}
+  shufflePower: 10
+  shuffleVelocity: {x: 10, y: 10}
   duration: 1
 --- !u!50 &923303909
 Rigidbody2D:

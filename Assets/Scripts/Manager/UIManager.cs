@@ -41,7 +41,7 @@ public class UIManager : MonoBehaviour
     /// UIManagerの初期設定
     /// </summary>
     /// <returns></returns>
-    public IEnumerator Initialize()() {
+    public IEnumerator Initialize() {
         // シャッフルボタンを非活性化(半透明の押せない状態にする)
         ActivateShuffleButton(false);
 
@@ -50,6 +50,8 @@ public class UIManager : MonoBehaviour
 
         // シャッフルボタンにメソッドを登録
         btnShuffle.onClick.AddListener(TriggerShuffle);
+
+        yield break;
     }
 
     /// <summary>
