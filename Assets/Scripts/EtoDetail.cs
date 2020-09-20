@@ -14,15 +14,15 @@ public class EtoDetail : MonoBehaviour
 
     public Button btnEto;
 
-    private ModeSelectPopUp modeSelectPopUp;
+    private EtoSelectPopUp etoSelectPopUp;
 
     public CanvasGroup canvasGroup;
 
     // 設定
-    public void SetUpEtoDetail(ModeSelectPopUp modeSelectPopUp, int etoNo, Sprite etoSprite) {
+    public void SetUpEtoDetail(EtoSelectPopUp etoSelectPopUp, int etoNo, Sprite etoSprite) {
         canvasGroup.alpha = 0.0f;
 
-        this.modeSelectPopUp = modeSelectPopUp;
+        this.etoSelectPopUp = etoSelectPopUp;
 
         etoType = (EtoType)etoNo;
 
@@ -47,6 +47,6 @@ public class EtoDetail : MonoBehaviour
         transform.DOScale(Vector3.one, 0.15f);
 
         // ボタンの色を選択中の色に変更する
-        modeSelectPopUp.InactivateEtoDetailList(etoType, 0.3f);
+        //modeSelectPopUp.InactivateEtoDetailList(etoType, 0.3f);
     }
 }

@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine.Events;
-using System.Security.Cryptography.X509Certificates;
-using System.Reflection;
 
 public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 {
@@ -55,21 +53,16 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 	[SerializeField, Header("今回のゲームで生成する干支の種類")]
 	private List<GameData.EtoData> selectedEtoDataList = new List<GameData.EtoData>();
 
+	//追加
 	[SerializeField, Header("干支の削除演出エフェクトのプレファブ")]
 	private GameObject eraseEffectPrefab;
 
-	//[SerializeField, Header("今回のゲームに登場する干支")]
-	//private List<EtoDetail> selectedEtoList = new List<EtoDetail>();
-
-	//　未
-
-	// 干支12種類のList(干支ボタン生成とゲームに登場する干支の種類を決める際に使用する)
-	public List<EtoDetail> etoDetailList = new List<EtoDetail>();
-
+	[SerializeField]
+	private EtoSelectPopUp etoSelectPopUp;
 
 	IEnumerator Start() {
-		// ステートを準備中に変更
-		gameState = GameState.Ready;
+		// ステートを干支選択中に変更
+		gameState = GameState.Select;
 
 		// UIManagerの初期設定
 		yield return StartCoroutine(uiManager.Initialize());
@@ -84,17 +77,17 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 			yield return StartCoroutine(GameData.instance.InitEtoDataList());
 		}
 
-		// TODO 干支の選択ポップアップを表示
-
+		// 干支の選択ポップアップに干支選択ボタンを生成
+		yield return StartCoroutine(etoSelectPopUp.CreateEtoButtons(this));
 
 		// 生成する干支をランダムで選択。この処理が終了するまで、次の処理へはいかないようにする
-		yield return StartCoroutine(SetUpEtoTypes(GameData.instance.etoTypeCount));
+		//yield return StartCoroutine(SetUpEtoTypes(GameData.instance.etoTypeCount));
 
 		// 残り時間の表示
-		uiManager.UpdateDisplayGameTime(GameData.instance.gameTime);
+		//uiManager.UpdateDisplayGameTime(GameData.instance.gameTime);
 
 		// 引数で指定した数の干支を生成する
-		StartCoroutine(CreateEtos(GameData.instance.createEtoCount));
+		//StartCoroutine(CreateEtos(GameData.instance.createEtoCount));
 	}
 
 	/// <summary>
@@ -197,10 +190,10 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 					
 				}
 			}
-			Debug.Log(dragEto.etoType);
+			//Debug.Log(dragEto.etoType);
 
 			if (eraseEtoList.Count > 1) {
-				Debug.Log(dragEto.num);
+				//Debug.Log(dragEto.num);
 				if (eraseEtoList[linkCount - 1] != lastSelectEto && eraseEtoList[linkCount - 1].num == dragEto.num && dragEto.isSelected) {
 					
 					// 選択中のボールを取り除く 
@@ -272,18 +265,18 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 	/// ゲームの準備
 	/// </summary>
 	public IEnumerator PreparateGame() {
-		// TODO ステートを準備中に変更
+		// ステートを準備中に変更
 		gameState = GameState.Ready;
 
 		// 残り時間の表示
-		//uiManager.UpdateDisplayGameTime(GameData.instance.gameTime);
+		uiManager.UpdateDisplayGameTime(GameData.instance.gameTime);
 
 		// ゲームに登場させる干支の種類を設定する
 		yield return StartCoroutine(SetUpEtoTypes(GameData.instance.etoTypeCount));
 
-		yield return StartCoroutine(SetUpSkill(GameData.instance.skillType));
+		//yield return StartCoroutine(SetUpSkill(GameData.instance.skillType));
 
-        // 初回分の干支を生成
+		// 引数で指定した数の干支を生成する
 		StartCoroutine(CreateEtos(GameData.instance.createEtoCount));		
 	}
 
@@ -342,11 +335,11 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 		// 新しくリストを用意して初期化に合わせてetoDataListを複製して、干支の候補リストとする
 		List<GameData.EtoData> candidateEtoDataList = new List<GameData.EtoData>(GameData.instance.etoDataList);
 
-		// TODO 選択中の干支を選んでリストに追加する
-		//EtoDetail myEto = chooseEtoList.Find((x) => x.etoType == GameData.instance.etoType);
-		//selectedEtoList.Add(myEto);
-		//chooseEtoList.Remove(myEto);
-		//typeCount--;
+		// 選択中の干支を探して生成する干支のリストに追加
+		GameData.EtoData myEto = candidateEtoDataList.Find((x) => x.etoType == GameData.instance.selectedEtoData.etoType);
+		selectedEtoDataList.Add(myEto);
+		candidateEtoDataList.Remove(myEto);
+		typeCount--;
 
 		// それ以外の干支を指定数だけをランダムに選ぶ
 		while (typeCount > 0)

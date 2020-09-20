@@ -766,7 +766,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.75686276}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1453,7 +1453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1674,7 +1674,7 @@ RectTransform:
   m_Children:
   - {fileID: 661094851}
   m_Father: {fileID: 1602071697}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1695,7 +1695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 0.34117648}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1894,7 +1894,7 @@ GameObject:
   - component: {fileID: 1146655434}
   - component: {fileID: 1146655433}
   m_Layer: 5
-  m_Name: EtoDetailTran
+  m_Name: EtoButtonTran
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1912,12 +1912,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1602071697}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 366}
-  m_SizeDelta: {x: 1021.61255, y: 1343.4587}
+  m_SizeDelta: {x: 1022, y: 1343}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1146655433
 MonoBehaviour:
@@ -1957,7 +1957,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 0.34117648}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2215,8 +2215,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1180, y: 2463.6467}
+  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_SizeDelta: {x: 1180, y: 2464}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1355818515
 MonoBehaviour:
@@ -2232,7 +2232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2809,12 +2809,12 @@ GameObject:
   - component: {fileID: 1602071698}
   - component: {fileID: 1602071699}
   m_Layer: 5
-  m_Name: ModeSelectPopUp
+  m_Name: EtoSelectPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1602071697
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2827,8 +2827,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1355818514}
-  - {fileID: 1048919456}
   - {fileID: 1146655432}
+  - {fileID: 1048919456}
   - {fileID: 524679936}
   m_Father: {fileID: 362382980}
   m_RootOrder: 7
@@ -2850,10 +2850,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa0dafa2f301444f8b1260130d9b2af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  etoDetailPrefab: {fileID: 5115626693093065829, guid: 79f50e349bb329745b225335b0f2bdec,
+  etoButtonPrefab: {fileID: 666211995933484983, guid: b5e6f177e691d024bb04b0569113dd76,
     type: 3}
-  etoDetailTran: {fileID: 1146655432}
-  gameManager: {fileID: 1884942870}
+  etoButtonTran: {fileID: 1146655432}
   btnStart: {fileID: 524679937}
   canvasGroup: {fileID: 1602071699}
 --- !u!225 &1602071699
@@ -3053,6 +3052,9 @@ MonoBehaviour:
   etoPoint: 100
   initTime: 30
   gameTime: 0
+  selectedEtoData:
+    etoType: 4
+    sprite: {fileID: 0}
   etoDataList: []
   etoRate: 3
 --- !u!4 &1765334887
@@ -3147,7 +3149,7 @@ MonoBehaviour:
   selectedEtoDataList: []
   eraseEffectPrefab: {fileID: 5064370109599861314, guid: 400b7785a55c46d41af1d80b7d1b0898,
     type: 3}
-  etoDetailList: []
+  etoSelectPopUp: {fileID: 1602071698}
 --- !u!4 &1884942871
 Transform:
   m_ObjectHideFlags: 0

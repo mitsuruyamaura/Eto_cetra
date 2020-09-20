@@ -41,6 +41,9 @@ public class GameData : MonoBehaviour
     [Header("現在のゲームの残り時間")]
     public float gameTime;
 
+    [Header("選択している干支")]
+    public EtoData selectedEtoData;
+
     /// <summary>
     /// 干支の基本情報
     /// </summary>
