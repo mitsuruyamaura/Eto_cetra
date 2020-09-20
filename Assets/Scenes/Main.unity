@@ -618,7 +618,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -267, y: 283.19995}
+  m_AnchoredPosition: {x: -267, y: 283}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &424740712
@@ -3145,6 +3145,8 @@ MonoBehaviour:
   gameState: 0
   resultPopUp: {fileID: 2079329115}
   selectedEtoDataList: []
+  eraseEffectPrefab: {fileID: 5064370109599861314, guid: 400b7785a55c46d41af1d80b7d1b0898,
+    type: 3}
   etoDetailList: []
 --- !u!4 &1884942871
 Transform:

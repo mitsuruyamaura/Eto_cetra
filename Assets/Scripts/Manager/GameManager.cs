@@ -55,6 +55,9 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 	[SerializeField, Header("今回のゲームで生成する干支の種類")]
 	private List<GameData.EtoData> selectedEtoDataList = new List<GameData.EtoData>();
 
+	[SerializeField, Header("干支の削除演出エフェクトのプレファブ")]
+	private GameObject eraseEffectPrefab;
+
 	//[SerializeField, Header("今回のゲームに登場する干支")]
 	//private List<EtoDetail> selectedEtoList = new List<EtoDetail>();
 
@@ -221,6 +224,11 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 			for (int i = 0; i < eraseEtoList.Count; i++) {
 				// 干支リストから取り除く
 				etoList.Remove(eraseEtoList[i]);
+
+				// エフェクト生成
+				GameObject effect = Instantiate(eraseEffectPrefab, eraseEtoList[i].gameObject.transform);
+				effect.transform.SetParent(etoSetTran);
+
 				// 干支を削除
 				Destroy(eraseEtoList[i].gameObject);
 			}
