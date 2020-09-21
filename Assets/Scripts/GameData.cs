@@ -75,14 +75,12 @@ public class GameData : MonoBehaviour
         } else {
             Destroy(gameObject);
         }
-        // 初期化
-        InitGame();
     }
 
     /// <summary>
     /// ゲーム初期化
     /// </summary>
-    private void InitGame() {
+    public void InitGame() {
         score = 0;
         eraseEtoCount = 0;
 
@@ -98,9 +96,6 @@ public class GameData : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
-        // 初期化
-        InitGame();
     }
 
     /// <summary>

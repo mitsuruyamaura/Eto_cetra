@@ -61,6 +61,9 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 	private EtoSelectPopUp etoSelectPopUp;
 
 	IEnumerator Start() {
+		// スコアなどを初期化
+		GameData.instance.InitGame();
+
 		// ステートを干支選択中に変更
 		gameState = GameState.Select;
 
