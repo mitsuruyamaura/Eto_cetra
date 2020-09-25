@@ -83,34 +83,34 @@ public class EtoSelectPopUp : MonoBehaviour
     //    // Resources
     //    Sprite[] sprites = Resources.LoadAll<Sprite>("Sprites/eto");
 
-//        for (int i = 0; i<createCount; i++) {
-//            EtoDetail etoDetail = Instantiate(etoDetailPrefab, etoDetailTran, false);
-//    etoDetail.SetUpEtoDetail(this, i, sprites[i]);           
-//            if (i == 0) {
-//                // 初期は子を選択している状態にする
-//                etoDetail.imgEto.color = new Color(0.65f, 0.65f, 0.65f);
-//    GameData.instance.etoDetail = etoDetail;
-//                GameData.instance.etoType = etoDetail.etoType;
-//            }
-//gameManager.etoDetailList.Add(etoDetail);
-//yield return new WaitForSeconds(0.15f);
-//        }
+    //        for (int i = 0; i<createCount; i++) {
+    //            EtoDetail etoDetail = Instantiate(etoDetailPrefab, etoDetailTran, false);
+    //    etoDetail.SetUpEtoDetail(this, i, sprites[i]);           
+    //            if (i == 0) {
+    //                // 初期は子を選択している状態にする
+    //                etoDetail.imgEto.color = new Color(0.65f, 0.65f, 0.65f);
+    //    GameData.instance.etoDetail = etoDetail;
+    //                GameData.instance.etoType = etoDetail.etoType;
+    //            }
+    //gameManager.etoDetailList.Add(etoDetail);
+    //yield return new WaitForSeconds(0.15f);
+    //        }
     //    btnStart.interactable = true;
     //}
 
-    // ボタンを押されたら遷移する処理
+    /// <summary>
+    /// スタートボタンを押した際の処理
+    /// </summary>
     private void OnClickStart() {
         // スタートボタンを押せないようにして重複タップを防止
         btnStart.interactable = false;
 
         // ゲームの準備開始
         StartCoroutine(gameManager.PreparateGame());
-        //StartCoroutine(gameManager.CreateEtos(GameData.instance.createEtoCount));
 
+        // 徐々に干支選択のポップアップを見えないようにしてから非表示にする
         canvasGroup.DOFade(0.0f, 0.5f);
         canvasGroup.blocksRaycasts = false;
-        // 破棄
-        //Destroy(gameObject, 5.0f);
     }
 
     /// <summary>
@@ -118,8 +118,7 @@ public class EtoSelectPopUp : MonoBehaviour
     /// 他のボタンは選択中ではない色(通常の色)に変更
     /// </summary>
     /// <param name="etoType"></param>
-    /// <param name="waitTime"></param>
-    public void ChangeColorToEtoButton(EtoType etoType, float waitTime) {
+    public void ChangeColorToEtoButton(EtoType etoType) {
         for (int i = 0; i < etoButtonList.Count; i++) {
             // 干支ボタンの色を選択中か、選択中でないかで変更
             if (etoButtonList[i].etoData.etoType == etoType) {

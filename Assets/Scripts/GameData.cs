@@ -62,9 +62,7 @@ public class GameData : MonoBehaviour
     [Header("干支12種類のリスト")]
     public List<EtoData> etoDataList = new List<EtoData>();
 
-
-    // 未
-
+    [Header("選択している干支を消した時のスコア倍率")]
     public float etoRate = 3;
 
 
@@ -93,7 +91,9 @@ public class GameData : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public IEnumerator RestartGame() {
-        yield return new WaitForSeconds(1.0f);
+        //yield return new WaitForSeconds(1.0f);
+
+        yield return StartCoroutine(TransitionManager.instance.FadePanel(1.0f));
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

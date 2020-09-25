@@ -61,6 +61,10 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 	private EtoSelectPopUp etoSelectPopUp;
 
 	IEnumerator Start() {
+		StartCoroutine(TransitionManager.instance.FadePanel(0.0f));
+
+		SoundManager.Instance.PlayBGM(SoundManager.Enum_BGM.Select);
+
 		// スコアなどを初期化
 		GameData.instance.InitGame();
 
@@ -234,18 +238,6 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 
 			//// スキルポイント加算
 			//uiManager.AddSkillPoint(removeEtoList.Count);
-
-			//// 消した数を加算
-			//eraseEtoCount += removeEtoList.Count;
-
-   //         // スコア加算処理
-   //         if (currentEtoType == GameData.instance.etoType) {
-			//	// 選択している干支の場合にはスコアボーナス
-			//	uiManager.AddScore(Mathf.CeilToInt(GameData.instance.etoPoint * removeEtoList.Count * GameData.instance.etoRate), true);
-			//} else {
-			//	// それ以外
-			//	uiManager.AddScore(GameData.instance.etoPoint * removeEtoList.Count, false);
-			//}
 			
 			// TODO ４つ以上消えていたら、ボーナス
 
@@ -277,10 +269,12 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 		// ゲームに登場させる干支の種類を設定する
 		yield return StartCoroutine(SetUpEtoTypes(GameData.instance.etoTypeCount));
 
-		//yield return StartCoroutine(SetUpSkill(GameData.instance.skillType));
+		yield return StartCoroutine(SetUpSkill(GameData.instance.skillType));
 
 		// 引数で指定した数の干支を生成する
-		StartCoroutine(CreateEtos(GameData.instance.createEtoCount));		
+		StartCoroutine(CreateEtos(GameData.instance.createEtoCount));
+
+		SoundManager.Instance.PlayBGM(SoundManager.Enum_BGM.Game);
 	}
 
 	/// <summary>
@@ -303,16 +297,6 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 
             // 干支の初期設定
             eto.SetUpEto(selectedEtoDataList[randomValue].etoType, selectedEtoDataList[randomValue].sprite);
-
-
-			// 干支のListに追加
-			//etoList.Add(eto);
-
-			// ランダムな干支を12種類の中から１つ選択
-			//int randomValue = Random.Range(0, (int)EtoType.Count);
-
-			//// 生成された干支の初期設定(干支の種類と干支の画像を引数を使ってEtoへ渡す)
-			//eto.SetUpEto((EtoType)randomValue, etoSprites[randomValue]);
 
 			etoList.Add(eto);
 
@@ -440,80 +424,17 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 			//Debug.Log("リザルト内容を表示します");
 		});
 
-		//Sequence sequence = DOTween.Sequence();
-		//sequence.Append(resultPopUp.transform.DOMoveY(0, 1.0f)).SetEase(Ease.Linear);
-		//sequence.Append(resultPopUp.transform.DOPunchPosition(new Vector3(0, 0, 0), 0.5f))
-		//	.OnComplete(() => {
-		//		// ゲーム結果表示
-		//		resultPopUp.DisplayResult(GameData.instance.eraseEtoCount);
-		//	}
-		//);
+		// SEを鳴らすまでの待機時間
+		yield return new WaitForSeconds(0.5f);
 
-		yield return new WaitForSeconds(1.0f);
+		// ドラムロールのSE再生
+		SoundManager.Instance.PlaySE(SoundManager.Enum_SE.Result);
+
+		// SEが流れ終わってBGMを切り替えるまでの待機時間
+		yield return new WaitForSeconds(2.5f);
+
+		SoundManager.Instance.PlayBGM(SoundManager.Enum_BGM.Result);
     }
-
-	/// <summary>
-	/// 特定の色のボールを違う色に変更する
-	/// </summary>
-	/// <param name="chooseBallColorNum">対象となるボールの番号</param>
-	/// <param name="changeSprite">変更する色</param>
-	//public void ChangeSpecificBalls(EtoType chooseEtoType, Sprite changeSprite) {
-	//	// chooseEtoTypeと同じ干支を持つ干支を探し出して、そのイメージをchangeBallColorNumに変える
-
-	//	// 干支変更の対象となる干支を入れるリストを用意
-	//	List<Eto> chooseBallList = new List<Eto>();
-
-	//	// 色の変更となるボールをすべて検索し、照合したボールをリストに代入する
-	//	// ①Linqで書く場合
-	//	chooseBallList = etoList.Where(x => x.etoType == chooseEtoType).ToList();
-
-	//	// ②foreachで書く場合
-	//	foreach (Eto ball in etoList) {
-	//		if (ball.etoNum == chooseBallColorNum) {
-	//			chooseBallList.Add(ball);
-	//		}
-	//	}
-
-	//	// 対象となったボールの色を指定された色に変更する
-	//	for (int i = 0; i < chooseBallList.Count; i++) {
-	//		chooseBallList[i].ChangeBallColor(changeSprite);
-	//	}
-	//}
-
-	/// <summary>
-	/// 特定の色のボールの色をランダムに変更する
-	/// </summary>
-	//public void ChangeSpecificBallsToRandomColor(int chooseBallColorNum) { 
-	//	// chooseBallColorNumという番号のボールを探しだして、ランダムな色に変える
-	//	List<Eto> chooseBallList = new List<Eto>();
-
-	//	// 色の変更となるボールをすべて検索し、照合したボールをリストに代入する
-	//	chooseBallList = etoList.Where(X => X.etoNum == chooseBallColorNum).ToList();
-
-	//	// foreachで書く場合
-	//	foreach (Eto ball in etoList) {
-	//		if (ball.etoNum == chooseBallColorNum) {
-	//			chooseBallList.Add(ball);
-	//		}
-	//	}
-
-	//	// 対象となったボールの色を指定された色に変更する
-	//	for (int i = 0; i < chooseBallList.Count; i++) {
-	//		chooseBallList[i].ChangeBallColor(selectedEtoList[Random.Range(0, selectedEtoList.Count)].imgEto.sprite);
-	//	}
-	//}
-
-	/// <summary>
-	/// すべてのボールをランダムな色に変更する
-	/// </summary>
-	//public void ChangeRandomBalls() {
-	//	for (int i = 0; i < etoList.Count; i++) {
-	//		etoList[i].ChangeBallColor(selectedEtoList[Random.Range(0, selectedEtoList.Count)].imgEto.sprite);
-	//	}
-	//}
-
-	// 自分の干支以外で一番数の多い干支をすべて自分の干支に変える
-
 
 	/// <summary>
 	/// 最も数の多い干支をまとめて削除する
@@ -571,33 +492,20 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 		uiManager.AddSkillPoint(count);
 
 		// スコアを加算
-		bool isMyEto = false;
-		if (etoType == GameData.instance.etoType) {
+		bool isChooseEto = false;
+		if (etoType == GameData.instance.selectedEtoData.etoType) {
+			// 選択している干支の場合にはスコアを多く加算　etoPoint * 消した干支の数 * etoRate
 			GameData.instance.score += Mathf.CeilToInt(GameData.instance.etoPoint * count * GameData.instance.etoRate);
-			isMyEto = true;
+			isChooseEto = true;
 		} else {
+			// それ以外は etoPoint * 消した干支の数 を加算
 			GameData.instance.score += GameData.instance.etoPoint * count;
 		}
 
-		// 消した数を加算
+		// 消した干支の数を加算
 		GameData.instance.eraseEtoCount += count;
 
 		// 画面に表示されているスコアの更新
-		uiManager.UpdateDisplayScore(isMyEto);
+		uiManager.UpdateDisplayScore(isChooseEto);
 	}
-
-	/// <summary>
-    /// 干支の基本情報
-    /// </summary>
-	//[System.Serializable]
-	//public class EtoOrigin
- //   {
-	//	public EtoType etoType;
-	//	public Sprite sprite;
-
-	//	public EtoOrigin(EtoType etoType, Sprite sprite) {
-	//		this.etoType = etoType;
-	//		this.sprite = sprite;
-	//	}
- //   }
 }
