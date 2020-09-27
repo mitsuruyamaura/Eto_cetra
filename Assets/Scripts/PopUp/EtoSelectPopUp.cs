@@ -102,6 +102,8 @@ public class EtoSelectPopUp : MonoBehaviour
     /// スタートボタンを押した際の処理
     /// </summary>
     private void OnClickStart() {
+        SoundManager.Instance.PlaySE(SoundManager.Enum_SE.OK);
+
         // スタートボタンを押せないようにして重複タップを防止
         btnStart.interactable = false;
 

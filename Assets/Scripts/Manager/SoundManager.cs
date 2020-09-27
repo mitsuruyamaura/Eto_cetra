@@ -39,6 +39,11 @@ public class SoundManager : MonoBehaviour
     public enum Enum_SE : int
     {
         Result,
+        OK,
+        Erase,
+        Skill,
+        Transition,
+        Shuffle,
     }
 
     // クロスフェード時間

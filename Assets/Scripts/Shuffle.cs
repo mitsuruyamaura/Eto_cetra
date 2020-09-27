@@ -50,6 +50,8 @@ public class Shuffle : MonoBehaviour {
     /// シャッフル停止
     /// </summary>
     private void StopShuffle() {
+        SoundManager.Instance.StopSE();
+
         shuffleTimer = 0;
 
         // コライダーをオフにして干支への影響をなくす

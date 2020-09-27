@@ -231,13 +231,15 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 
 				// 干支を削除
 				Destroy(eraseEtoList[i].gameObject);
+
+				SoundManager.Instance.PlaySE(SoundManager.Enum_SE.Erase);
 			}
 
 			// スコアと消した干支の数の加算
 			AddScores(currentEtoType, eraseEtoList.Count);
 
 			//// スキルポイント加算
-			//uiManager.AddSkillPoint(removeEtoList.Count);
+			uiManager.AddSkillPoint(eraseEtoList.Count);
 			
 			// TODO ４つ以上消えていたら、ボーナス
 
@@ -269,7 +271,8 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 		// ゲームに登場させる干支の種類を設定する
 		yield return StartCoroutine(SetUpEtoTypes(GameData.instance.etoTypeCount));
 
-		yield return StartCoroutine(SetUpSkill(GameData.instance.skillType));
+		// スキルボタンの設定
+		yield return StartCoroutine(SetUpSkill(GameData.instance.selectedSkillType));
 
 		// 引数で指定した数の干支を生成する
 		StartCoroutine(CreateEtos(GameData.instance.createEtoCount));
@@ -356,10 +359,14 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 	/// <summary>
 	/// スキルボタンに登録するスキルのメソッドを取得して戻す
 	/// </summary>
+	/// <param name="chooseSkillType"></param>
+	/// <returns></returns>
 	public UnityAction GetSkill(SkillType chooseSkillType) {
 		switch (chooseSkillType) {
-			case SkillType.DeleteMaxBall:
-				return DeleteMaxBalls;
+			case SkillType.DeleteMaxEtoType:
+				return DeleteMaxEtoType;
+
+		    // TODO スキルが増えた場合には追加する
 		}
 		return null;
 	}
@@ -399,10 +406,10 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 	/// </summary>
 	private IEnumerator GameUp() {
 		// シャッフルボタンを非活性化して押せなくする
-		uiManager.ActivateShuffleButton(false);
+		//uiManager.ActivateShuffleButton(false);
 
 		// ボタンを押せなくする
-		//uiManager.InActiveButtons();
+		uiManager.InActiveButtons();
 
 		gameState = GameState.Result;
 		yield return new WaitForSeconds(1.5f);
@@ -439,7 +446,7 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 	/// <summary>
 	/// 最も数の多い干支をまとめて削除する
 	/// </summary>
-	public void DeleteMaxBalls() {
+	public void DeleteMaxEtoType() {
 		// Dictinaryを初期化。干支のタイプを数を代入できるようにする
 		Dictionary<EtoType, int> dictionary = new Dictionary<EtoType, int>();
 
@@ -489,7 +496,7 @@ public class GameManager : MonoBehaviour   // 干支の選択に戻ります。
 	/// <param name="count">消した干支の数</param>
 	private void AddScores(EtoType? etoType, int count) {
 		// スキルポイント加算
-		uiManager.AddSkillPoint(count);
+		//uiManager.AddSkillPoint(count);
 
 		// スコアを加算
 		bool isChooseEto = false;

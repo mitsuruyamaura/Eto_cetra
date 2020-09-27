@@ -54,6 +54,7 @@ public class ResultPopUp : MonoBehaviour
     /// </summary>
     private void OnClickMovePopUp() {
         SoundManager.Instance.PlayBGM(SoundManager.Enum_BGM.Select);
+        SoundManager.Instance.PlaySE(SoundManager.Enum_SE.Transition);
 
         btnClosePopUp.interactable = false;
 

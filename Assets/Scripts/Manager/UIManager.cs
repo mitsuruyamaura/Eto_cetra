@@ -24,14 +24,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Button btnShuffle;
 
+    [SerializeField]
+    private Button btnSkill;
 
-    // 未
-
-    [HideInInspector]
-    public Button btnSkill;
-
-    [HideInInspector]
-    public Image imgSkill;
+    [SerializeField]
+    private Image imgSkillPoint;
 
     private Tweener tweener = null;
 
@@ -60,6 +57,14 @@ public class UIManager : MonoBehaviour
     /// <param name="skillType"></param>
     /// <returns></returns>
     public IEnumerator SetUpSkillButton(UnityAction unityAction) {
+        // スキルポイントが0からスタートするので、スキルボタンを押せなくしておく
+        btnSkill.interactable = false;
+
+        // スキルの登録がない場合、スキルボタンには何も登録しない
+        if (unityAction == null) {
+            yield break;
+        }
+
         // UnityEvent初期化
         unityEvent = new UnityEvent();
 
@@ -68,11 +73,6 @@ public class UIManager : MonoBehaviour
 
         // スキルボタンにメソッドを登録
         btnSkill.onClick.AddListener(TriggerSkill);
-
-        // スキルポイントが0からスタートするので、スキルボタンを押せなくしておく
-        btnSkill.interactable = false;
-
-        yield break;
     }
 
     /// <summary>
@@ -87,6 +87,8 @@ public class UIManager : MonoBehaviour
     /// シャッフル実行
     /// </summary>
     private void TriggerShuffle() {
+        SoundManager.Instance.PlaySE(SoundManager.Enum_SE.Shuffle);
+
         // シャッフルボタンを押せなくする。重複タップ防止
         ActivateShuffleButton(false);
 
@@ -98,6 +100,8 @@ public class UIManager : MonoBehaviour
     /// スキル使用
     /// </summary>
     public void TriggerSkill() {
+        SoundManager.Instance.PlaySE(SoundManager.Enum_SE.Skill);
+
         // ボタンの重複タップ防止
         btnSkill.interactable = false;
 
@@ -105,11 +109,11 @@ public class UIManager : MonoBehaviour
         unityEvent.Invoke();
 
         // スキルポイント関連を初期化
-        imgSkill.DOFillAmount(0, 1.0f);
+        imgSkillPoint.DOFillAmount(0, 1.0f);
         tweener.Kill();
         tweener = null;
 
-        imgSkill.transform.localScale = Vector3.one;
+        imgSkillPoint.transform.localScale = Vector3.one;
     }
 
     /// <summary>
@@ -133,14 +137,14 @@ public class UIManager : MonoBehaviour
     /// </summary>
     /// <param name="count"></param>
     public void AddSkillPoint(int count) {
-        float a = imgSkill.fillAmount;
+        float a = imgSkillPoint.fillAmount;
         float value = a += count * 0.05f;
-        imgSkill.DOFillAmount(value, 0.5f);
+        imgSkillPoint.DOFillAmount(value, 0.5f);
 
-        if (imgSkill.fillAmount >= 1.0f && tweener == null) {
-            Debug.Log(imgSkill.fillAmount);
+        if (imgSkillPoint.fillAmount >= 1.0f && tweener == null) {
+            Debug.Log(imgSkillPoint.fillAmount);
             btnSkill.interactable = true;
-            tweener = imgSkill.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.25f).SetEase(Ease.InCirc).SetLoops(-1, LoopType.Yoyo);
+            tweener = imgSkillPoint.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.25f).SetEase(Ease.InCirc).SetLoops(-1, LoopType.Yoyo);
         }
     }
 
@@ -152,6 +156,9 @@ public class UIManager : MonoBehaviour
         txtTimer.text = time.ToString("F0");
     }
 
+    /// <summary>
+    /// 複数のボタンを押せないように制御する
+    /// </summary>
     public void InActiveButtons() {
         btnSkill.interactable = false;
         btnShuffle.interactable = false;

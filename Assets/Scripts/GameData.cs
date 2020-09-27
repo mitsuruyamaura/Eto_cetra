@@ -12,10 +12,6 @@ public class GameData : MonoBehaviour
     [HideInInspector]
     public EtoType etoType;
 
-    //[Header("選択中のスキル")]
-    [HideInInspector]
-    public SkillType skillType;
-
     //[Header("選択中の干支の情報")]    // 受け取っているが、まだ使っていない
     [HideInInspector]
     public EtoDetail etoDetail;
@@ -64,6 +60,9 @@ public class GameData : MonoBehaviour
 
     [Header("選択している干支を消した時のスコア倍率")]
     public float etoRate = 3;
+
+    [Header("選択中のスキル")]
+    public SkillType selectedSkillType;
 
 
     void Awake() {
