@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8512199722744141487
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8512199722744141473}
+  - component: {fileID: 8512199722744141486}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: SoundManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8512199722744141473
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512199722744141487}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8512199722744141486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512199722744141487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf9518ee5741af941aac260db469efd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BGM:
+  - clip: {fileID: 8300000, guid: f949ccc18d78b2b4f81eab3c2862a7c4, type: 3}
+    loopTime: 0
+    endTime: 0
+  - clip: {fileID: 8300000, guid: 8f638083ffac5e94d83aa66368fad28f, type: 3}
+    loopTime: 0
+    endTime: 0
+  - clip: {fileID: 8300000, guid: c199380098411624c971bd98ac9df4f8, type: 3}
+    loopTime: 0
+    endTime: 0
+  SE:
+  - {fileID: 8300000, guid: 30938540f7f75614fa4ae652978585af, type: 3}
+  - {fileID: 8300000, guid: e94c5f8027816774aad7a7544ad9ab21, type: 3}
+  - {fileID: 8300000, guid: f5fb364c48d595b4ab31c8a7321d2f24, type: 3}
+  - {fileID: 8300000, guid: f96b5e30109af9544801126807689c66, type: 3}
+  - {fileID: 8300000, guid: 9c59bb07f2c4b2a45b56d41100c1b006, type: 3}
+  - {fileID: 8300000, guid: 493f2793ac326c04e8e74acd60a423cf, type: 3}
+  audioMixer: {fileID: 0}
