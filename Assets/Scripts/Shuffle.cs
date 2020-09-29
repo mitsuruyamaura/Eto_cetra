@@ -50,7 +50,7 @@ public class Shuffle : MonoBehaviour {
     /// シャッフル停止
     /// </summary>
     private void StopShuffle() {
-        SoundManager.Instance.StopSE();
+        SoundManager.instance.StopSE();
 
         shuffleTimer = 0;
 

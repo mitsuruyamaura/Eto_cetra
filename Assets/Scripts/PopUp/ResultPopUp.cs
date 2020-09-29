@@ -53,8 +53,8 @@ public class ResultPopUp : MonoBehaviour
     /// リザルト表示を元の位置に戻して、ゲームをリスタートする
     /// </summary>
     private void OnClickMovePopUp() {
-        SoundManager.Instance.PlayBGM(SoundManager.Enum_BGM.Select);
-        SoundManager.Instance.PlaySE(SoundManager.Enum_SE.Transition);
+        SoundManager.instance.PlayBGM(SoundManager.BGM_Type.Select);
+        SoundManager.instance.PlaySE(SoundManager.SE_Type.Transition);
 
         btnClosePopUp.interactable = false;
 

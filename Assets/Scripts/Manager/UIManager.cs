@@ -87,7 +87,7 @@ public class UIManager : MonoBehaviour
     /// シャッフル実行
     /// </summary>
     private void TriggerShuffle() {
-        SoundManager.Instance.PlaySE(SoundManager.Enum_SE.Shuffle);
+        SoundManager.instance.PlaySE(SoundManager.SE_Type.Shuffle);
 
         // シャッフルボタンを押せなくする。重複タップ防止
         ActivateShuffleButton(false);
@@ -100,7 +100,7 @@ public class UIManager : MonoBehaviour
     /// スキル使用
     /// </summary>
     public void TriggerSkill() {
-        SoundManager.Instance.PlaySE(SoundManager.Enum_SE.Skill);
+        SoundManager.instance.PlaySE(SoundManager.SE_Type.Skill);
 
         // ボタンの重複タップ防止
         btnSkill.interactable = false;

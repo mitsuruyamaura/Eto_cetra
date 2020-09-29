@@ -43,17 +43,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf9518ee5741af941aac260db469efd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BGM:
-  - clip: {fileID: 8300000, guid: f949ccc18d78b2b4f81eab3c2862a7c4, type: 3}
-    loopTime: 0
-    endTime: 0
-  - clip: {fileID: 8300000, guid: 8f638083ffac5e94d83aa66368fad28f, type: 3}
-    loopTime: 0
-    endTime: 0
-  - clip: {fileID: 8300000, guid: c199380098411624c971bd98ac9df4f8, type: 3}
-    loopTime: 0
-    endTime: 0
-  SE:
+  BGM_Volume: 0.2
+  SE_Volume: 0.2
+  Mute: 0
+  BGM_Clips:
+  - {fileID: 8300000, guid: f949ccc18d78b2b4f81eab3c2862a7c4, type: 3}
+  - {fileID: 8300000, guid: 8f638083ffac5e94d83aa66368fad28f, type: 3}
+  - {fileID: 8300000, guid: c199380098411624c971bd98ac9df4f8, type: 3}
+  SE_Clips:
   - {fileID: 8300000, guid: 30938540f7f75614fa4ae652978585af, type: 3}
   - {fileID: 8300000, guid: e94c5f8027816774aad7a7544ad9ab21, type: 3}
   - {fileID: 8300000, guid: f5fb364c48d595b4ab31c8a7321d2f24, type: 3}

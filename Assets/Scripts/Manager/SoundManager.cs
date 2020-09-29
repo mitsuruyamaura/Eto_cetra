@@ -1,42 +1,25 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Audio;
 using DG.Tweening;
+using UnityEngine.Audio;
 
-// 音管理クラス
+/// <summary>
+/// 音源管理クラス
+/// </summary>
 public class SoundManager : MonoBehaviour
 {
+    public static SoundManager instance;
 
-    protected static SoundManager instance;
-
-    public static SoundManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = (SoundManager)FindObjectOfType(typeof(SoundManager));
-
-                if (instance == null)
-                {
-                    Debug.LogError("SoundManager Instance Error");
-                }
-            }
-            return instance;
-        }
-    }
-
-    // 音楽管理
-    public enum Enum_BGM : int
-    {
+    // BGM管理
+    public enum BGM_Type
+    { 
         Select,
         Game,
         Result,
     }
 
-    // 効果音管理
-    public enum Enum_SE : int
+    // SE管理
+    public enum SE_Type
     {
         Result,
         OK,
@@ -47,221 +30,179 @@ public class SoundManager : MonoBehaviour
     }
 
     // クロスフェード時間
-    public const float XFADE_TIME = 1.4f;
+    public const float CROSS_FADE_TIME = 1.0f;
 
-    // 音量
-    public SoundVolume volume = new SoundVolume();
-
-    // === AudioSource ===
-    // BGM
-    private AudioSource[] BGMsources = new AudioSource[2];
-    // SE
-    private AudioSource[] SEsources = new AudioSource[16];
+    // ボリューム関連
+    public float BGM_Volume = 0.1f;
+    public float SE_Volume = 0.2f;
+    public bool Mute = false;
 
     // === AudioClip ===
-    // BGM
-    public BGMDatas[] BGM;
-    // SE
-    public AudioClip[] SE;
+    public AudioClip[] BGM_Clips;
+    public AudioClip[] SE_Clips;
 
-    // SE用AudioMixer
+    // SE用AudioMixer  未使用
     public AudioMixer audioMixer;
 
-    bool isXFading;
 
-    int currentBgmIndex = 999;
+    // === AudioSource ===
+    private AudioSource[] BGM_Sources = new AudioSource[2];
+    private AudioSource[] SE_Sources = new AudioSource[16];
 
-    [System.Serializable]
-    public class BGMDatas
-    {
-        public AudioClip clip;
-        public float loopTime;
-        public float endTime;
-    }
+    private bool isCrossFading;
+
+    private int currentBgmIndex = 999;
 
     void Awake()
     {
-        GameObject[] obj = GameObject.FindGameObjectsWithTag("SoundManager");
-
-        if (obj.Length > 1)
-        {
-            // 既に存在しているなら削除
+        // シングルトンかつ、シーン遷移しても破棄されないようにする
+        if (instance == null) {
+            instance = this;
+            DontDestroyOnLoad(gameObject);         
+        } else  { 
             Destroy(gameObject);
         }
-        else
-        {
-            // 音管理はシーン遷移では破棄させない
-            DontDestroyOnLoad(gameObject);
-        }
 
-        // BGM AudioSource
-        BGMsources[0] = gameObject.AddComponent<AudioSource>();
-        BGMsources[1] = gameObject.AddComponent<AudioSource>();
+        // BGM用 AudioSource追加
+        BGM_Sources[0] = gameObject.AddComponent<AudioSource>();
+        BGM_Sources[1] = gameObject.AddComponent<AudioSource>();
 
-        // SE AudioSource
-        for (int i = 0; i < SEsources.Length; i++)
+        // SE用 AudioSource追加
+        for (int i = 0; i < SE_Sources.Length; i++)
         {
-            SEsources[i] = gameObject.AddComponent<AudioSource>();
+            SE_Sources[i] = gameObject.AddComponent<AudioSource>();
         }
     }
 
-    void Update()
+    void Update() 
     {
-        // ミュート設定
-        BGMsources[0].mute = volume.Mute;
-        BGMsources[1].mute = volume.Mute;
-        foreach (AudioSource source in SEsources)
-        {
-            source.mute = volume.Mute;
-        }
-
         // ボリューム設定
-        if (!isXFading)
-        {
-            BGMsources[0].volume = volume.BGM;
-            BGMsources[1].volume = volume.BGM;
-        }
-        foreach (AudioSource source in SEsources)
-        {
-            source.volume = volume.SE;
+        if (!isCrossFading) {
+            BGM_Sources[0].volume = BGM_Volume;
+            BGM_Sources[1].volume = BGM_Volume;
         }
 
-        // Loop処理
-        if (currentBgmIndex != 999)
+        foreach (AudioSource source in SE_Sources)
         {
-            if (BGM[currentBgmIndex].loopTime > 0f)
-            {
-                if (!BGMsources[0].mute && BGMsources[0].isPlaying && BGMsources[0].clip != null)
-                {
-                    if (BGMsources[0].time >= BGM[currentBgmIndex].endTime)
-                    {
-                        BGMsources[0].time = BGM[currentBgmIndex].loopTime;
-                    }
-                }
-                if (!BGMsources[1].mute && BGMsources[1].isPlaying && BGMsources[1].clip != null)
-                {
-                    if (BGMsources[1].time >= BGM[currentBgmIndex].endTime)
-                    {
-                        BGMsources[1].time = BGM[currentBgmIndex].loopTime;
-                    }
-                }
-            }
+            source.volume = SE_Volume;
         }
     }
 
-    // ***** BGM再生 *****
-    // BGM再生
-    public void PlayBGM(Enum_BGM bgmNo, bool loopFlg = true)
+    /// <summary>
+    /// BGM再生
+    /// </summary>
+    /// <param name="bgmType"></param>
+    /// <param name="loopFlg"></param>
+    public void PlayBGM(BGM_Type bgmType, bool loopFlg = true)
     {
-        int index = (int)bgmNo;
+        int index = (int)bgmType;
         currentBgmIndex = index;
-        //if(PlayerPrefs.GetInt(Constant.BGM_FLG_NAME,1) == 1){
-        if (0 > index || BGM.Length <= index)
+
+        if (index < 0 || BGM_Clips.Length <= index)
         {
             return;
         }
+
         // 同じBGMの場合は何もしない
-        if (BGMsources[0].clip != null && BGMsources[0].clip == BGM[index].clip)
-        {
+        if (BGM_Sources[0].clip != null && BGM_Sources[0].clip == BGM_Clips[index])  {
+            return;
+        } else if (BGM_Sources[1].clip != null && BGM_Sources[1].clip == BGM_Clips[index]) {
             return;
         }
-        else if (BGMsources[1].clip != null && BGMsources[1].clip == BGM[index].clip)
-        {
-            return;
-        }
-        //volume.BGM = gameData.volumeBgm;
+
         // フェードでBGM開始
-        if (BGMsources[0].clip == null && BGMsources[1].clip == null)
-        {
-            BGMsources[0].loop = loopFlg;
-            BGMsources[0].clip = BGM[index].clip;
-            BGMsources[0].Play();
-            //BGMsources[0].DOFade(gameData.volumeBgm, XFADE_TIME);
-        }
-        else
-        {
-            // クロスフェード
-            StartCoroutine(CrossfadeChangeBMG(index, loopFlg));
+        if (BGM_Sources[0].clip == null && BGM_Sources[1].clip == null)  {
+            BGM_Sources[0].loop = loopFlg;
+            BGM_Sources[0].clip = BGM_Clips[index];
+            BGM_Sources[0].Play();
+        } else {
+            // クロスフェード処理
+            StartCoroutine(CrossFadeChangeBMG(index, loopFlg));
         }
     }
 
-    private IEnumerator CrossfadeChangeBMG(int index, bool loopFlg)
-    {
-        isXFading = true;
-        if (BGMsources[0].clip != null)
-        {
+    /// <summary>
+    /// BGMのクロスフェード処理
+    /// </summary>
+    /// <param name="index">AudioClipの番号</param>
+    /// <param name="loopFlg">ループ設定。ループしない場合だけfalse指定</param>
+    /// <returns></returns>
+    private IEnumerator CrossFadeChangeBMG(int index, bool loopFlg) {
+        isCrossFading = true;
+        if (BGM_Sources[0].clip != null)  {
             // 0がなっていて、1を新しい曲としてPlay
-            BGMsources[1].volume = 0;
-            BGMsources[1].clip = BGM[index].clip;
-            BGMsources[1].loop = loopFlg;
-            BGMsources[1].Play();
-            BGMsources[0].DOFade(0, XFADE_TIME).SetEase(Ease.Linear);
-            //BGMsources[1].DOFade(gameData.volumeBgm, XFADE_TIME).SetEase(Ease.Linear);
-            yield return new WaitForSeconds(XFADE_TIME);
-            BGMsources[0].Stop();
-            BGMsources[0].clip = null;
-        }
-        else
-        {
+            BGM_Sources[1].volume = 0;
+            BGM_Sources[1].clip = BGM_Clips[index];
+            BGM_Sources[1].loop = loopFlg;
+            BGM_Sources[1].Play();
+            BGM_Sources[0].DOFade(0, CROSS_FADE_TIME).SetEase(Ease.Linear);
+
+            yield return new WaitForSeconds(CROSS_FADE_TIME);
+            BGM_Sources[0].Stop();
+            BGM_Sources[0].clip = null;
+        } else {
             // 1がなっていて、0を新しい曲としてPlay
-            BGMsources[0].volume = 0;
-            BGMsources[0].clip = BGM[index].clip;
-            BGMsources[0].loop = loopFlg;
-            BGMsources[0].Play();
-            BGMsources[1].DOFade(0, XFADE_TIME).SetEase(Ease.Linear);
-            //BGMsources[0].DOFade(gameData.volumeBgm, XFADE_TIME).SetEase(Ease.Linear);
-            yield return new WaitForSeconds(XFADE_TIME);
-            BGMsources[1].Stop();
-            BGMsources[1].clip = null;
+            BGM_Sources[0].volume = 0;
+            BGM_Sources[0].clip = BGM_Clips[index];
+            BGM_Sources[0].loop = loopFlg;
+            BGM_Sources[0].Play();
+            BGM_Sources[1].DOFade(0, CROSS_FADE_TIME).SetEase(Ease.Linear);
+
+            yield return new WaitForSeconds(CROSS_FADE_TIME);
+            BGM_Sources[1].Stop();
+            BGM_Sources[1].clip = null;
         }
-        isXFading = false;
+        isCrossFading = false;
     }
 
-    // BGM停止
+    /// <summary>
+    /// BGM停止
+    /// </summary>
     public void StopBGM()
     {
-        BGMsources[0].Stop();
-        BGMsources[1].Stop();
-        BGMsources[0].clip = null;
-        BGMsources[1].clip = null;
+        BGM_Sources[0].Stop();
+        BGM_Sources[1].Stop();
+        BGM_Sources[0].clip = null;
+        BGM_Sources[1].clip = null;
     }
 
-    // ***** SE再生 *****
-    // SE再生
-    public void PlaySE(Enum_SE seNo)
-    {
-        int index = (int)seNo;
-        //if(PlayerPrefs.GetInt(Constant.SE_FLG_NAME,1) == 1){
-        if (0 > index || SE.Length <= index)
-        {
+    /// <summary>
+    /// SE再生
+    /// </summary>
+    /// <param name="seType"></param>
+    public void PlaySE(SE_Type seType)  {
+        int index = (int)seType;
+        if (index < 0 || SE_Clips.Length <= index) {
             return;
         }
 
         // 再生中で無いAudioSouceで鳴らす
-        foreach (AudioSource source in SEsources)
-        {
-            if (false == source.isPlaying)
-            {
-                source.clip = SE[index];
-                //volume.SE = gameData.volumeSe;
+        foreach (AudioSource source in SE_Sources) {
+            if (false == source.isPlaying)  {
+                source.clip = SE_Clips[index];
                 source.Play();
                 return;
             }
         }
-        //}
     }
 
-    // SE停止
-    public void StopSE()
-    {
+    /// <summary>
+    /// SE停止
+    /// </summary>
+    public void StopSE() {
         // 全てのSE用のAudioSouceを停止する
-        foreach (AudioSource source in SEsources)
-        {
+        foreach (AudioSource source in SE_Sources) {
             source.Stop();
             source.clip = null;
         }
     }
 
+////* 未使用 *////
+
+    /// <summary>
+    /// AudioMixer設定
+    /// </summary>
+    /// <param name="vol"></param>
     public void SetAudioMixerVolume(float vol)
     {
         if (vol == 0)
@@ -274,15 +215,21 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// BGM一時停止
+    /// </summary>
     public void MuteBGM()
     {
-        BGMsources[0].Stop();
-        BGMsources[1].Stop();
+        BGM_Sources[0].Stop();
+        BGM_Sources[1].Stop();
     }
 
+    /// <summary>
+    /// BGM一時停止の位置から再生
+    /// </summary>
     public void ResumeBGM()
     {
-        BGMsources[0].Play();
-        BGMsources[1].Play();
+        BGM_Sources[0].Play();
+        BGM_Sources[1].Play();
     }
 }
