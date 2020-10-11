@@ -33,10 +33,9 @@ public class ResultPopUp : MonoBehaviour
                         txtScore.text = num.ToString();
                     },
                     score,
-                    1.0f).SetEase(Ease.InCirc));
+                    1.0f).OnComplete(() => { initValue = 0; }).SetEase(Ease.InCirc));   // 消した干支の数のカウントアップ用に initValueを初期化
         sequence.AppendInterval(0.5f);
 
-        initValue = 0;
         sequence.Append(DOTween.To(() => initValue,
                     (num) => {
                         initValue = num;
