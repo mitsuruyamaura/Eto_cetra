@@ -1,43 +1,7 @@
 fileFormatVersion: 2
-guid: 94dae628bc7c9684586ac9c96d663ff3
+guid: 49ce7b24dba333c4dab52ed7d39f3b61
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 7465866508517001815
-    second: eto_0
-  - first:
-      213: 496998928767432021
-    second: eto_1
-  - first:
-      213: 2949958168011680941
-    second: eto_2
-  - first:
-      213: 7708322326995642806
-    second: eto_3
-  - first:
-      213: -7327765345275096358
-    second: eto_4
-  - first:
-      213: -2353855183943513490
-    second: eto_5
-  - first:
-      213: 5786604265314030430
-    second: eto_6
-  - first:
-      213: 6449854746091758515
-    second: eto_7
-  - first:
-      213: -5760174995483037403
-    second: eto_8
-  - first:
-      213: 797510470975262805
-    second: eto_9
-  - first:
-      213: 2249595112256395583
-    second: eto_10
-  - first:
-      213: 4134246820066582546
-    second: eto_11
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -125,7 +89,31 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
     buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -140,253 +128,253 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: eto_0
+      name: Bomb_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 1110
-        width: 370
-        height: 370
+        y: 1661.3333
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 75a44ac98061c9760800000000000000
-      internalID: 7465866508517001815
+      spriteID: b2a89976dde6163418c0092b88f60cec
+      internalID: -459287097
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eto_1
+      name: Bomb_1
       rect:
         serializedVersion: 2
-        x: 370
-        y: 1110
-        width: 370
-        height: 370
+        x: 826
+        y: 1661.3333
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 555beea74e1b5e600800000000000000
-      internalID: 496998928767432021
+      spriteID: 69375d13bc85f214c9b3dc51c3a8021e
+      internalID: 1937945173
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eto_2
+      name: Bomb_2
       rect:
         serializedVersion: 2
-        x: 740
-        y: 1110
-        width: 370
-        height: 370
+        x: 1652
+        y: 1661.3333
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dac2992035b50f820800000000000000
-      internalID: 2949958168011680941
+      spriteID: f51e33c51e537464485b281040122e2d
+      internalID: -1453675214
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eto_3
+      name: Bomb_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 740
-        width: 370
-        height: 370
+        x: 2478
+        y: 1661.3333
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6b9a9c2e05679fa60800000000000000
-      internalID: 7708322326995642806
+      spriteID: 6b88ff0dac3934540baf32c6be434eeb
+      internalID: -1915050705
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eto_4
-      rect:
-        serializedVersion: 2
-        x: 370
-        y: 740
-        width: 370
-        height: 370
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ad2d57d1e3c8e4a90800000000000000
-      internalID: -7327765345275096358
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: eto_5
-      rect:
-        serializedVersion: 2
-        x: 740
-        y: 740
-        width: 370
-        height: 370
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e6ac5547e2d655fd0800000000000000
-      internalID: -2353855183943513490
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: eto_6
+      name: Bomb_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 370
-        width: 370
-        height: 370
+        y: 831.3333
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e539dc9abe52e4050800000000000000
-      internalID: 5786604265314030430
+      spriteID: bded8a6df65c5874fa49ca707e825010
+      internalID: -729468300
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eto_7
+      name: Bomb_5
       rect:
         serializedVersion: 2
-        x: 370
-        y: 370
-        width: 370
-        height: 370
+        x: 826
+        y: 831.3333
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3b3aaa108bc728950800000000000000
-      internalID: 6449854746091758515
+      spriteID: ea3d40f1510b8714ebfb2d7de490e3ba
+      internalID: -736227125
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eto_8
+      name: Bomb_6
       rect:
         serializedVersion: 2
-        x: 740
-        y: 370
-        width: 370
-        height: 370
+        x: 1652
+        y: 831.3333
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 521752e3c5fbf00b0800000000000000
-      internalID: -5760174995483037403
+      spriteID: b444ceee26318e04f9d20701d1a0f274
+      internalID: 367235139
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eto_9
+      name: Bomb_7
+      rect:
+        serializedVersion: 2
+        x: 2478
+        y: 831.3333
+        width: 826.25
+        height: 830.6667
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13f674a0b6ccf0b4883d68b2f4d3325e
+      internalID: 277668433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bomb_8
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 370
-        height: 370
+        y: 1.333313
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 55092274c83511b00800000000000000
-      internalID: 797510470975262805
+      spriteID: d001f8ba649ca424a983af85eb008357
+      internalID: 1724221275
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eto_10
+      name: Bomb_9
       rect:
         serializedVersion: 2
-        x: 370
-        y: 0
-        width: 370
-        height: 370
+        x: 826
+        y: 1.333313
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f395f72f5da283f10800000000000000
-      internalID: 2249595112256395583
+      spriteID: 58b79fe99aaa36745af8af73aa8ce19c
+      internalID: 1455258275
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eto_11
+      name: Bomb_10
       rect:
         serializedVersion: 2
-        x: 740
-        y: 0
-        width: 370
-        height: 370
+        x: 1652
+        y: 1.333313
+        width: 826.25
+        height: 830.6667
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2106bd3249bcf5930800000000000000
-      internalID: 4134246820066582546
+      spriteID: 5b4e807d69c8ded46a3ac7dc91d507fc
+      internalID: -1406790496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bomb_11
+      rect:
+        serializedVersion: 2
+        x: 2478
+        y: 1.333313
+        width: 826.25
+        height: 830.6667
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a465c0c6fd8e168429a98a7762e94a9c
+      internalID: 504116681
       vertices: []
       indices: 
       edges: []
@@ -402,18 +390,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      eto_9: 797510470975262805
-      eto_8: -5760174995483037403
-      eto_0: 7465866508517001815
-      eto_7: 6449854746091758515
-      eto_10: 2249595112256395583
-      eto_3: 7708322326995642806
-      eto_1: 496998928767432021
-      eto_5: -2353855183943513490
-      eto_6: 5786604265314030430
-      eto_11: 4134246820066582546
-      eto_4: -7327765345275096358
-      eto_2: 2949958168011680941
+      Bomb_8: 1724221275
+      Bomb_4: -729468300
+      Bomb_5: -736227125
+      Bomb_7: 277668433
+      Bomb_6: 367235139
+      Bomb_9: 1455258275
+      Bomb_11: 504116681
+      Bomb_0: -459287097
+      Bomb_1: 1937945173
+      Bomb_2: -1453675214
+      Bomb_3: -1915050705
+      Bomb_10: -1406790496
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
