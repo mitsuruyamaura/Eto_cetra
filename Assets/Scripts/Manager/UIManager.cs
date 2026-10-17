@@ -139,12 +139,12 @@ public class UIManager : MonoBehaviour
     public void AddSkillPoint(int count) {
         float a = imgSkillPoint.fillAmount;
         float value = a += count * 0.05f;
-        imgSkillPoint.DOFillAmount(value, 0.5f);
+        imgSkillPoint.DOFillAmount(value, 0.5f).SetLink(gameObject);
 
         if (imgSkillPoint.fillAmount >= 1.0f && tweener == null) {
             Debug.Log(imgSkillPoint.fillAmount);
             btnSkill.interactable = true;
-            tweener = imgSkillPoint.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.25f).SetEase(Ease.InCirc).SetLoops(-1, LoopType.Yoyo);
+            tweener = imgSkillPoint.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.25f).SetEase(Ease.InCirc).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
         }
     }
 

@@ -70,7 +70,7 @@ public class Shuffle : MonoBehaviour {
             // コライダー内にある干支に対して物理演算を行う
 
             // 干支に対するシャッフルの相対速度を計算
-            Vector2 relativeVelocity = shuffleVelocity - rb.velocity;
+            Vector2 relativeVelocity = shuffleVelocity - rb.linearVelocity;
 
             // 干支に力を加える(シャッフル)
             rb.AddForce(shufflePower * relativeVelocity);
